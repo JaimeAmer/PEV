@@ -1,4 +1,4 @@
-package pr1;
+package pr1.base;
 
 import java.util.Vector;
 

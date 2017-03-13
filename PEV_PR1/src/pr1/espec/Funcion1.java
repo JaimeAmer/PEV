@@ -1,7 +1,9 @@
-package pr1;
+package pr1.espec;
 
 import java.math.*;
 import java.util.Vector;
+
+import pr1.base.Cromosoma;
 
 
 

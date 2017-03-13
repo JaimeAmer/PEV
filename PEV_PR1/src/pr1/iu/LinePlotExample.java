@@ -1,4 +1,4 @@
-package pr1;
+package pr1.iu;
 
 import javax.swing.*;
 import org.math.plot.*;
