@@ -1,79 +1,98 @@
 package pr1.base;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Random;
 
 
 public abstract class Cromosoma {
 
-	private Vector<Gen> cromosoma;
-	private double fenotipo;
-	private double aptitud;
-	private double puntuacion;
-	private double punt_acum;
+	protected ArrayList<Gen> genes;
+	protected ArrayList<Integer> longitud;
+	protected Boolean maximizar;
 	
-	public Cromosoma(){
-		this.cromosoma = new Vector<Gen>();
-	}
-	
-	public Cromosoma(Vector<Gen> cromosoma){
-		this.cromosoma = cromosoma;
-	}
-	
-	private Gen getAlelo(int alelo){
-		return cromosoma.elementAt(alelo);
+	static protected Integer valorGen(Gen g){
+		Integer valor = 0;
+		for(int i=0; i<g.getAlelo().size(); i++){
+			if(g.getAlelo().get(i).booleanValue()){
+				valor += (int) Math.pow(2, i);
+			}
+		}
+		return valor;
 	}
 	
-	public Gen getGenotipo(int alelo){
-		return this.getAlelo(alelo);
-	}
+	abstract protected ArrayList<Float> getFenotipo();
 	
-	public double getFenotipo() {
-		return fenotipo;
-	}
-
-	public void setFenotipo(double fenotipo) {
-		this.fenotipo = fenotipo;
-	}
-
-	public double getAptitud() {
-		return aptitud;
-	}
-
-	public void setAptitud(double aptitud) {
-		this.aptitud = aptitud;
-	}
-
-	public double getPuntuacion() {
-		return puntuacion;
-	}
-
-	public void setPuntuacion(double puntuacion) {
-		this.puntuacion = puntuacion;
-	}
-
-	public double getPunt_acum() {
-		return punt_acum;
-	}
-
-	public void setPunt_acum(double punt_acum) {
-		this.punt_acum = punt_acum;
-	}
-	/*
-	public double getFenotipo(int alelo){
-		double fenotipo = 0;
-		Vector<Boolean> gen = this.getAlelo(alelo).getGen();
-		
-		for(int i=gen.size(); i > 0; i--){
-			fenotipo = fenotipo + Math.pow(2, Double.parseDouble(gen.elementAt(i).toString()));
+	abstract protected Float getAptitud();
+	
+	static private void cruzarPv(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer){
+		for(int i=0; i<hijo1.genes.size(); i++){
+			hijo1.genes.get(i).setAlelo(padre1.genes.get(i).getAlelo());
+			hijo2.genes.get(i).setAlelo(padre2.genes.get(i).getAlelo());
 		}
 		
+		int corte = randomizer.nextInt(padre1.longitudTotal()-1)+1;
 		
-		return fenotipo;
+		int primerGen = 0;
+		int longitudAcumulada = hijo1.longitud.get(0).intValue();
+		while(longitudAcumulada < corte){
+			primerGen++;
+			longitudAcumulada += hijo1.longitud.get(primerGen).intValue();
+		}
+		
+		//	Hijo 1
+		int pos = longitudAcumulada - corte;
+		ArrayList<Boolean> genesPadre = (ArrayList<Boolean>) padre2.genes.get(primerGen).getAlelo().clone();
+		ArrayList<Boolean> genesHijo = (ArrayList<Boolean>) hijo1.genes.get(primerGen).getAlelo().clone();
+		for(int i=pos; i>0; i--){
+			genesHijo.set(genesHijo.size()-i, genesPadre.get(genesHijo.size()-i));
+		}
+		
+		hijo1.genes.get(primerGen).setAlelo(genesHijo);
+		
+		for(int i=primerGen+1; i<padre2.genes.size(); i++){
+			hijo1.genes.get(i).setAlelo(padre2.genes.get(i).getAlelo());
+		}
+		
+		//	Hijo 2
+		genesPadre = (ArrayList<Boolean>) padre1.genes.get(primerGen).getAlelo().clone();
+		genesHijo = (ArrayList<Boolean>) hijo2.genes.get(primerGen).getAlelo().clone();
+		for(int i=pos; i>0; i--){
+			genesHijo.set(genesHijo.size()-i, genesPadre.get(genesHijo.size()-i));
+		}
+		
+		hijo2.genes.get(primerGen).setAlelo(genesHijo);
+		
+		for(int i=primerGen+1; i<padre1.genes.size(); i++){
+			hijo2.genes.get(i).setAlelo(padre1.genes.get(i).getAlelo());
+		}
+				
 	}
-	*/
 	
+	static public void cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer, TipoAlgoritmo cruce){
+		
+	}
 	
+	public void mutar(Float probabilidadMutacion, Random randomizer){
+		
+	}
 	
+	public Integer longitudTotal(){
+		Integer longitudTotal = 0;
+		
+		for(int i=0; i<genes.size(); i++){
+			longitudTotal += longitud.get(i).intValue();
+		}
+		
+		return longitudTotal;
+	}
 	
+	public void copia(Cromosoma c){
+		if(genes.size() == c.genes.size()){
+			for(int i=0; i<genes.size(); i++){
+				genes.get(i).setAlelo(c.genes.get(i).getAlelo());
+			}
+		}
+	}
 	
+	abstract public Boolean esMaximizacion();
 }
