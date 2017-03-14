@@ -1,7 +1,5 @@
 package pr1.base;
 
-
-
 public class AlgoritmoSeleccionEnum {
 	
 	private TipoAlgoritmo tipo;
