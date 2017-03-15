@@ -68,12 +68,35 @@ public abstract class Cromosoma {
 				
 	}
 	
-	static public void cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer, TipoAlgoritmo cruce){
-		
+	static public void cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer, String cruce){
+		if(padre1 instanceof CromosomaReal){
+			switch(cruce){
+			case "DiscretoUniforme":
+				CromosomaReal.cruzarRealDiscretoUniforme(padre1, padre2, hijo1, hijo2, randomizer);
+				break;
+			case "Externo":
+				CromosomaReal.cruzarRealExterno(padre1, padre2, hijo1, hijo2, randomizer);
+				break;
+			case "Aritmetico":
+				CromosomaReal.cruzarRealAritmetico(padre1, padre2, hijo1, hijo2, randomizer);
+				break;
+			case "SBX":
+				CromosomaReal.cruzarRealSBX(padre1, padre2, hijo1, hijo2, randomizer);
+				break;
+			}
+		}
+		else cruzarPv(padre1, padre2, hijo1, hijo2, randomizer);
 	}
 	
 	public void mutar(Float probabilidadMutacion, Random randomizer){
-		
+		for(int i=0; i<genes.size(); i++){
+			ArrayList<Boolean> alelos = genes.get(i).getAlelo();
+			for(int j=0; j<alelos.size(); j++){
+				if(randomizer.nextFloat() < probabilidadMutacion){
+					alelos.set(j, !alelos.get(j).booleanValue());
+				}
+			}
+		}
 	}
 	
 	public Integer longitudTotal(){
