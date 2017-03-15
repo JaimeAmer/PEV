@@ -2,9 +2,11 @@ package pr1.espec;
 
 import java.math.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Vector;
 
 import pr1.base.Cromosoma;
+import pr1.base.Gen;
 
 
 
@@ -13,38 +15,45 @@ public class Funcion1 extends Cromosoma{
 	 private final double minimo = -250.0;
 	 private final double maximo = 250.0;
 		
-	
-	
-	private double f(double x){
+	public Funcion1(Float precision, Random randomizer){
+		longitud = new ArrayList<Integer>(1);
+		int x = (int) Math.ceil(((Math.log(1+(maximo-minimo)/precision))/Math.log(2)));
+		longitud.set(0, x);
+		genes = new ArrayList<Gen>(1);
+		genes.set(0, new Gen(longitud.get(0), randomizer));
 		
-		if(x >= minimo && x <= maximo)
-			return -Math.abs(x*Math.sin(Math.sqrt(Math.abs(x))));
-		else return 0;
+		maximizar = false;
 	}
 
 
 
 	@Override
 	protected ArrayList<Float> getFenotipo() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Float> array = new ArrayList<Float>(8);
+		float x = (float) (minimo + (maximo-minimo)*valorGen(genes.get(0)) / (Math.pow(2, longitud.get(0).floatValue())-1));
+		array.set(0, x);
+		array.set(1, (float) 0);
+		return array;
 	}
 
 
 
 	@Override
 	protected Float getAptitud() {
-		// TODO Auto-generated method stub
-		return null;
+		float x = getFenotipo().get(0);
+		float f = (float) -Math.abs(x*Math.sin(Math.sqrt(Math.abs(x))));
+		return f;
 	}
 
 
 
 	@Override
 	public Boolean esMaximizacion() {
-		// TODO Auto-generated method stub
-		return null;
+		return maximizar;
 	}
 	
+	public String toString(){
+		return "Valor mejor: " + getAptitud() + " en x: " + getFenotipo().get(0);
+	}
 	
 }

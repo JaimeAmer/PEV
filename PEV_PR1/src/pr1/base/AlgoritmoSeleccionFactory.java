@@ -2,7 +2,7 @@ package pr1.base;
 
 public class AlgoritmoSeleccionFactory {
 
-	public static AlgoritmoSeleccion(TipoAlgoritmo a, Integer participantes){
+	 static public AlgoritmoSeleccion getAlgoritmoSeleccion(TipoAlgoritmo a, Integer participantes){
 		switch(a){
 		case TORNEO:
 			return new SeleccionTorneo(participantes);
