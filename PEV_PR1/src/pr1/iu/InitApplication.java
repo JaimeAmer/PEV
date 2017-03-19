@@ -47,7 +47,7 @@ public class InitApplication {
 		long t = System.currentTimeMillis();
 		
 		// COMPROBAR PARAMETROS BIEN COLOCADOS
-		Algoritmo algoritmo = new Algoritmo(_tamanoPoblacion, _precision, _probabilidadCruce, _probabilidadMutacion, funcion, _numGeneraciones, _semilla, _participantes, _n, elitismo, tipoAlgoritmo, metodoSeleccion);
+		Algoritmo algoritmo = new Algoritmo(_tamanoPoblacion, _precision, _probabilidadCruce/100, _probabilidadMutacion/100, funcion, _numGeneraciones, _semilla, _participantes, _n, elitismo, tipoAlgoritmo, metodoSeleccion);
 		
 		ArrayList<Double> mejorAbsoluto = new ArrayList<Double>(_numGeneraciones);
 		ArrayList<Double> mejorGeneracion = new ArrayList<Double>(_numGeneraciones);
