@@ -17,7 +17,7 @@ abstract public class CromosomaReal extends Cromosoma{
 		CromosomaReal cr = (CromosomaReal) otro;
 		if(genes.size() == cr.genes.size()){
 			for(int i=0; i<genes.size(); i++){
-				genes.set(i, cr.genes.get(i));
+				genes.add(i, cr.genes.get(i));
 			}
 		}
 	}
@@ -32,8 +32,8 @@ abstract public class CromosomaReal extends Cromosoma{
 		CromosomaReal hijoR2 = (CromosomaReal) hijo2;
 		
 		for(int i=0; i<hijoR1.genes.size(); i++){
-			hijoR1.genes.set(i, padreR1.genes.get(i));
-			hijoR2.genes.set(i, padreR2.genes.get(i));
+			hijoR1.genes.add(i, padreR1.genes.get(i));
+			hijoR2.genes.add(i, padreR2.genes.get(i));
 		}
 		
 		float probabilidadCruce = randomizer.nextFloat()*0.7f+0.1f;
@@ -41,14 +41,14 @@ abstract public class CromosomaReal extends Cromosoma{
 		//	Hijo 1
 		for(int i=0; i<padreR2.genes.size(); i++){
 			if(randomizer.nextFloat() < probabilidadCruce){
-				hijoR1.genes.set(i, padreR2.genes.get(i));
+				hijoR1.genes.add(i, padreR2.genes.get(i));
 			}
 		}
 		
 		//	Hijo 2
 		for(int i=0; i<padreR1.genes.size(); i++){
 			if(randomizer.nextFloat() < probabilidadCruce){
-				hijoR2.genes.set(i, padreR1.genes.get(i));
+				hijoR2.genes.add(i, padreR1.genes.get(i));
 			}
 		}
 	}
@@ -63,8 +63,8 @@ abstract public class CromosomaReal extends Cromosoma{
 		
 		//	Cruce Externo
 		for(int i=0; i<hijoR1.genes.size(); i++){
-			hijoR1.genes.set(i, padreR1.genes.get(i));
-			hijoR2.genes.set(i, padreR2.genes.get(i));
+			hijoR1.genes.add(i, padreR1.genes.get(i));
+			hijoR2.genes.add(i, padreR2.genes.get(i));
 		}
 		
 		int corte;
@@ -75,12 +75,12 @@ abstract public class CromosomaReal extends Cromosoma{
 		
 		//	Hijo 1
 		for(int i=corte; i<padreR2.genes.size(); i++){
-			hijoR1.genes.set(i, padreR2.genes.get(i));
+			hijoR1.genes.add(i, padreR2.genes.get(i));
 		}
 		
 		//	Hijo 2
 		for(int i=corte; i<padreR1.genes.size(); i++){
-			hijoR2.genes.set(i, padreR1.genes.get(i));
+			hijoR2.genes.add(i, padreR1.genes.get(i));
 		}
 		
 	}
@@ -94,8 +94,8 @@ abstract public class CromosomaReal extends Cromosoma{
 		CromosomaReal hijoR2 = (CromosomaReal) hijo2;
 		
 		for(int i=0; i<hijoR1.genes.size(); i++){
-			hijoR1.genes.set(i, padreR1.genes.get(i));
-			hijoR2.genes.set(i, padreR2.genes.get(i));
+			hijoR1.genes.add(i, padreR1.genes.get(i));
+			hijoR2.genes.add(i, padreR2.genes.get(i));
 		}
 		
 		float probabilidadCruce = randomizer.nextFloat()*0.9f+0.1f;
@@ -103,9 +103,9 @@ abstract public class CromosomaReal extends Cromosoma{
 		//	Hijo 1 e Hijo 2
 		for(int i=0; i<padreR2.genes.size(); i++){
 			float result1 = (padreR2.genes.get(i) * probabilidadCruce + padreR1.genes.get(i) * (1-probabilidadCruce)) / 2.0f;
-			hijoR1.genes.set(i, result1);
+			hijoR1.genes.add(i, result1);
 			float result2 = (padreR2.genes.get(i) * (1-probabilidadCruce) + padreR1.genes.get(i)*probabilidadCruce) / 2.0f;
-			hijoR2.genes.set(i, result2);
+			hijoR2.genes.add(i, result2);
 		}
 		
 	}

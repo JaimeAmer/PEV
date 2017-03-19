@@ -24,8 +24,8 @@ public class SeleccionTorneo implements AlgoritmoSeleccion{
 		for(int i=0; i<tamanoPoblacion; i++){
 			for(int j=0; j<participantes; j++){
 				int indiceAleat = randomizer.nextInt(tamanoPoblacion);
-				elegidosValue.set(j, aptitudes.get(indiceAleat));
-				elegidosIndex.set(j, indiceAleat);
+				elegidosValue.add(j, aptitudes.get(indiceAleat));
+				elegidosIndex.add(j, indiceAleat);
 			}
 			
 			float maximoValor = Integer.MIN_VALUE;

@@ -38,13 +38,13 @@ public class SeleccionRanking implements AlgoritmoSeleccion{
 		ArrayList<Integer> indicesOrd = new ArrayList<Integer>(poblacion.size());
 		
 		for(int i=0; !monticuloMax.isEmpty(); i++){
-			indicesOrd.set(i, monticuloMax.poll().getValue());
+			indicesOrd.add(i, monticuloMax.poll().getValue());
 		}
 		
 		ArrayList<Float> probabilidades = new ArrayList<Float>(poblacion.size());
 		for(int i=0; i<probabilidades.size(); i++){
 			float prob = (1.0f / probabilidades.size()) * (beta-2*(beta-1)*(i-1.0f)/probabilidades.size()-1);
-			probabilidades.set(i, prob);
+			probabilidades.add(i, prob);
 		}
 		
 		for(int i=0; i<seleccionados.size(); i++){

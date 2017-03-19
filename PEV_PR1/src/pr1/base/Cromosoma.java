@@ -44,7 +44,9 @@ public abstract class Cromosoma {
 		ArrayList<Boolean> genesPadre = (ArrayList<Boolean>) padre2.genes.get(primerGen).getAlelo().clone();
 		ArrayList<Boolean> genesHijo = (ArrayList<Boolean>) hijo1.genes.get(primerGen).getAlelo().clone();
 		for(int i=pos; i>0; i--){
-			genesHijo.set(genesHijo.size()-i, genesPadre.get(genesHijo.size()-i));
+			int at = genesHijo.size()-i;
+			Boolean elem = genesPadre.get(at).booleanValue();
+			genesHijo.add(at, elem);
 		}
 		
 		hijo1.genes.get(primerGen).setAlelo(genesHijo);
@@ -57,7 +59,7 @@ public abstract class Cromosoma {
 		genesPadre = (ArrayList<Boolean>) padre1.genes.get(primerGen).getAlelo().clone();
 		genesHijo = (ArrayList<Boolean>) hijo2.genes.get(primerGen).getAlelo().clone();
 		for(int i=pos; i>0; i--){
-			genesHijo.set(genesHijo.size()-i, genesPadre.get(genesHijo.size()-i));
+			genesHijo.add(genesHijo.size()-i, genesPadre.get(genesHijo.size()-i));
 		}
 		
 		hijo2.genes.get(primerGen).setAlelo(genesHijo);
@@ -93,7 +95,7 @@ public abstract class Cromosoma {
 			ArrayList<Boolean> alelos = genes.get(i).getAlelo();
 			for(int j=0; j<alelos.size(); j++){
 				if(randomizer.nextFloat() < probabilidadMutacion){
-					alelos.set(j, !alelos.get(j).booleanValue());
+					alelos.add(j, !alelos.get(j).booleanValue());
 				}
 			}
 		}

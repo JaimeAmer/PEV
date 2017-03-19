@@ -4,37 +4,22 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import org.math.plot.Plot2DPanel;
+import org.math.plot.*;
 
-import es.ucm.fdi.pe.ConfigPanel;
+import es.ucm.fdi.pe.*;
 import pr1.base.*;
 
-public class InitApplication {
+public class Application {
 	
 	private GUI gui;
 
-	public InitApplication() {
+	public Application() {
 		// define your data
 		gui = new GUI(this);
-		double[] x = { 1, 2, 3, 4, 5, 6 };
-		double[] y = { 45, 89, 6, 32, 63, 12 };
 		
-		// create your PlotPanel (you can use it as a JPanel)
-		Plot2DPanel plot = new Plot2DPanel();
-		// define the legend position
-		plot.addLegend("SOUTH");
-		
-		// add a line plot to the PlotPanel
-		plot.addLinePlot("my plot", x, y);
-		
-		// put the PlotPanel in a JFrame like a JPanel
-		JFrame frame = new JFrame("a plot panel");
-		frame.setSize(600, 600);
-		frame.setContentPane(plot);
-		frame.setVisible(true);
 	}
 	
-	private void init(String precision, String probabilidadCruce, String probabilidadMutacion, String metodoSeleccion, Boolean elitismo, String funcion, String tamanoPoblacion, String numGeneraciones, String semilla, String n, String participantes, String tipoAlgoritmo){
+	public void init(String precision, String probabilidadCruce, String probabilidadMutacion, String metodoSeleccion, Boolean elitismo, String funcion, String tamanoPoblacion, String numGeneraciones, String semilla, String n, String participantes, String tipoAlgoritmo){
 		float _precision = Float.parseFloat(precision);
 		float _probabilidadCruce = Float.parseFloat(probabilidadCruce);
 		float _probabilidadMutacion = Float.parseFloat(probabilidadMutacion);
@@ -56,13 +41,6 @@ public class InitApplication {
 		//	Ejecucion del algoritmo
 		String result = algoritmo.execute(mejorAbsoluto, mejorGeneracion, mediaGeneracion);
 		
-		//	Mostrar resultados
-		gui.fillPlot(mejorAbsoluto, mejorGeneracion, mediaGeneracion, _numGeneraciones, result);
-		
-		//	Mostrar la semilla utilizada
-		gui.setSeed(algoritmo.getSemilla());
-		t = System.currentTimeMillis();
-		gui.setTime((float)t/1000);
 	}
 
 }
