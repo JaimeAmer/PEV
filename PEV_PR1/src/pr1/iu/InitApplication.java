@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import org.math.plot.Plot2DPanel;
 
+import es.ucm.fdi.pe.ConfigPanel;
 import pr1.base.*;
 
 public class InitApplication {
@@ -20,7 +21,6 @@ public class InitApplication {
 		
 		// create your PlotPanel (you can use it as a JPanel)
 		Plot2DPanel plot = new Plot2DPanel();
-		
 		// define the legend position
 		plot.addLegend("SOUTH");
 		
@@ -42,12 +42,12 @@ public class InitApplication {
 		int _numGeneraciones = Integer.parseInt(numGeneraciones);
 		long _semilla = Long.parseLong(semilla);
 		int _n = Integer.parseInt(n);
-		Integer _participantes = Integer.parseInt(participantes);
+		int _participantes = Integer.parseInt(participantes);
 		
 		long t = System.currentTimeMillis();
 		
 		// COMPROBAR PARAMETROS BIEN COLOCADOS
-		Algoritmo algoritmo = new Algoritmo(_tamanoPoblacion, _precision, _probabilidadCruce, _probabilidadMutacion, funcion, _numGeneraciones, semilla, participantes, n, elitismo, tipoAlgoritmo, metodoSeleccion);
+		Algoritmo algoritmo = new Algoritmo(_tamanoPoblacion, _precision, _probabilidadCruce, _probabilidadMutacion, funcion, _numGeneraciones, _semilla, _participantes, _n, elitismo, tipoAlgoritmo, metodoSeleccion);
 		
 		ArrayList<Double> mejorAbsoluto = new ArrayList<Double>(_numGeneraciones);
 		ArrayList<Double> mejorGeneracion = new ArrayList<Double>(_numGeneraciones);
