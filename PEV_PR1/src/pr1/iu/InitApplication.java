@@ -12,7 +12,7 @@ public class InitApplication {
 	
 	private GUI gui;
 
-	public InitApplication(String[] args) {
+	public InitApplication() {
 		// define your data
 		gui = new GUI(this);
 		double[] x = { 1, 2, 3, 4, 5, 6 };
