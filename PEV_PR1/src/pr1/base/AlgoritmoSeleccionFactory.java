@@ -2,15 +2,15 @@ package pr1.base;
 
 public class AlgoritmoSeleccionFactory {
 
-	 static public AlgoritmoSeleccion getAlgoritmoSeleccion(TipoAlgoritmo a, Integer participantes){
-		switch(a){
-		case TORNEO:
+	 static public AlgoritmoSeleccion getAlgoritmoSeleccion(String tipoSeleccion, Integer participantes){
+		switch(tipoSeleccion){
+		case "Torneo":
 			return new SeleccionTorneo(participantes);
-		case RANKING:
+		case "Ranking":
 			return new SeleccionRanking();
-		case RULETA:
+		case "Ruleta":
 			return new SeleccionRuleta();
-		case TORNEO_PROBABILISTICO:
+		case "Torneo Probabilistico":
 			return new SeleccionTorneoProbabilistico(participantes);
 		default:
 			return new SeleccionRuleta();

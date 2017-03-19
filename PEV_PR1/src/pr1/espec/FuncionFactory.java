@@ -14,6 +14,10 @@ public class FuncionFactory {
 			return new Funcion2(precision, randomizer);
 		case "Funcion3":
 			return new Funcion3(precision, randomizer);
+		case "Funcion4":
+			return new Funcion4(precision, n, randomizer);
+		case "Funcion 5":
+			return new Funcion5(precision, randomizer);
 		default:
 			return new Funcion1(precision, randomizer);
 		}
