@@ -41,6 +41,8 @@ public class Application {
 		//	Ejecucion del algoritmo
 		String result = algoritmo.execute(mejorAbsoluto, mejorGeneracion, mediaGeneracion);
 		
+		
 	}
 
+	
 }

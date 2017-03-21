@@ -1,13 +1,10 @@
 package pr1.espec;
 
-import java.math.*;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
 
 import pr1.base.Cromosoma;
 import pr1.base.Gen;
-
 
 
 public class Funcion1 extends Cromosoma{
