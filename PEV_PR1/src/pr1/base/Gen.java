@@ -2,22 +2,23 @@ package pr1.base;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 
 
 public class Gen {
-	private ArrayList<Boolean> alelo;
+	private Vector<Boolean> alelo;
 	
 	public Gen(Integer n, Random randomizer){
-		this.alelo = new ArrayList<Boolean>();
+		this.alelo = new Vector<Boolean>();
 		for(int i=0; i<n; i++)
-			alelo.add(i, randomizer.nextBoolean());
+			alelo.insertElementAt(randomizer.nextBoolean(), i);
 	}
 	
-	public ArrayList<Boolean> getAlelo(){
+	public Vector<Boolean> getAlelo(){
 		return this.alelo;
 	}
 	
-	public void setAlelo(ArrayList<Boolean> alelo){
-		this.alelo = alelo;
+	public void setAlelo(Vector<Boolean> genesHijo){
+		this.alelo = genesHijo;
 	}
 }

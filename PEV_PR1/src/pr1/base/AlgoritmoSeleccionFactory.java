@@ -12,6 +12,8 @@ public class AlgoritmoSeleccionFactory {
 			return new SeleccionRuleta();
 		case "Torneo Probabilistico":
 			return new SeleccionTorneoProbabilistico(participantes);
+		case "Estocastico Universal":
+			return new SeleccionEstocasticoUniversal(participantes);
 		default:
 			return new SeleccionRuleta();
 		}

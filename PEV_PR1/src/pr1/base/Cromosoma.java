@@ -2,6 +2,7 @@ package pr1.base;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 
 
 public abstract class Cromosoma {
@@ -41,10 +42,10 @@ public abstract class Cromosoma {
 		
 		//	Hijo 1
 		int pos = longitudAcumulada - corte;
-		ArrayList<Boolean> genesPadre = (ArrayList<Boolean>) padre2.genes.get(primerGen).getAlelo().clone();
-		ArrayList<Boolean> genesHijo = (ArrayList<Boolean>) hijo1.genes.get(primerGen).getAlelo().clone();
+		Vector<Boolean> genesPadre = (Vector<Boolean>) padre2.genes.get(primerGen).getAlelo();
+		Vector<Boolean> genesHijo = (Vector<Boolean>) hijo1.genes.get(primerGen).getAlelo();
 		for(int i=pos; i>0; i--){
-			int at = genesHijo.size()-i;
+			int at = genesHijo.size() - i;
 			Boolean elem = genesPadre.get(at).booleanValue();
 			genesHijo.add(at, elem);
 		}
@@ -56,8 +57,8 @@ public abstract class Cromosoma {
 		}
 		
 		//	Hijo 2
-		genesPadre = (ArrayList<Boolean>) padre1.genes.get(primerGen).getAlelo().clone();
-		genesHijo = (ArrayList<Boolean>) hijo2.genes.get(primerGen).getAlelo().clone();
+		genesPadre = (Vector<Boolean>) padre1.genes.get(primerGen).getAlelo().clone();
+		genesHijo = (Vector<Boolean>) hijo2.genes.get(primerGen).getAlelo().clone();
 		for(int i=pos; i>0; i--){
 			genesHijo.add(genesHijo.size()-i, genesPadre.get(genesHijo.size()-i));
 		}
@@ -92,7 +93,7 @@ public abstract class Cromosoma {
 	
 	public void mutar(Float probabilidadMutacion, Random randomizer){
 		for(int i=0; i<genes.size(); i++){
-			ArrayList<Boolean> alelos = genes.get(i).getAlelo();
+			Vector<Boolean> alelos = genes.get(i).getAlelo();
 			for(int j=0; j<alelos.size(); j++){
 				if(randomizer.nextFloat() < probabilidadMutacion){
 					alelos.add(j, !alelos.get(j).booleanValue());

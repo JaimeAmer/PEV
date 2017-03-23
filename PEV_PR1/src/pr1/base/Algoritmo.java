@@ -6,6 +6,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 
 import pr1.espec.FuncionFactory;
+import pr1.iu.Application;
 
 public class Algoritmo {
 
@@ -50,10 +51,8 @@ public class Algoritmo {
 			randomizer.setSeed(semilla);
 		}
 		else{
-			this.semilla = System.currentTimeMillis();
 			randomizer = new Random(semilla);
 		}
-		
 		//	Inicializamos la poblacion
 		this.poblacion = new ArrayList<Cromosoma>(this.tamanoPoblacion);
 		for(int i=0; i<this.tamanoPoblacion; i++){

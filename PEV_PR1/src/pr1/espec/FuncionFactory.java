@@ -8,16 +8,18 @@ public class FuncionFactory {
 
 	static public Cromosoma getFuncion(String funcion, float precision, int n, Random randomizer){
 		switch(funcion){
-		case "Funcion1":
+		case "Funcion 1":
 			return new Funcion1(precision, randomizer);
-		case "Funcion2":
+		case "Funcion 2":
 			return new Funcion2(precision, randomizer);
-		case "Funcion3":
+		case "Funcion 3":
 			return new Funcion3(precision, randomizer);
-		case "Funcion4":
+		case "Funcion 4":
 			return new Funcion4(precision, n, randomizer);
 		case "Funcion 5":
 			return new Funcion5(precision, randomizer);
+		case "Funcion 4-R":
+			return null;
 		default:
 			return new Funcion1(precision, randomizer);
 		}

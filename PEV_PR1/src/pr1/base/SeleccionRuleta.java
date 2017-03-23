@@ -11,7 +11,7 @@ public class SeleccionRuleta implements AlgoritmoSeleccion {
 			ArrayList<Cromosoma> seleccionados, Integer tamanoPoblacion,
 			ArrayList<Cromosoma> poblacion, Boolean minimizacion,
 			Random randomizer) {
-		// TODO Auto-generated method stub
+		
 		for(int i=0; i<tamanoPoblacion; i++){
 			float probabilidad = randomizer.nextFloat();
 			int selec = 0;

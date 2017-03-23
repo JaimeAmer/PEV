@@ -14,8 +14,7 @@ public class SeleccionRanking implements AlgoritmoSeleccion{
 			ArrayList<Float> puntuacionesAcumuladas,
 			ArrayList<Cromosoma> seleccionados, Integer tamanoPoblacion,
 			ArrayList<Cromosoma> poblacion, Boolean minimizacion, Random randomizer) {
-		// TODO Auto-generated method stub
-		
+				
 		Comparator<Par<Float, Integer> > cmp = new Comparator<Par<Float, Integer>>(){
 			public int compare(Par<Float, Integer> p1, Par<Float, Integer> p2){
 				if(p1.getKey() > p2.getKey())
