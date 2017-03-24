@@ -5,19 +5,19 @@ import java.util.Random;
 
 abstract public class CromosomaReal extends Cromosoma{
 	
-	protected ArrayList<Float> genes;
-	protected ArrayList<Integer> longitud;
+	protected Float[] genes;
+	protected Integer[] longitud;
 	protected Boolean maximizar;
 	
 	public Integer getLongitudTotal(){
-		return genes.size();
+		return genes.length;
 	}
 	
 	public void copia(Cromosoma otro){
 		CromosomaReal cr = (CromosomaReal) otro;
-		if(genes.size() == cr.genes.size()){
-			for(int i=0; i<genes.size(); i++){
-				genes.add(i, cr.genes.get(i));
+		if(genes.length == cr.genes.length){
+			for(int i=0; i<genes.length; i++){
+				genes[i] = cr.genes[i];
 			}
 		}
 	}
@@ -31,24 +31,24 @@ abstract public class CromosomaReal extends Cromosoma{
 		CromosomaReal hijoR1 = (CromosomaReal) hijo1;
 		CromosomaReal hijoR2 = (CromosomaReal) hijo2;
 		
-		for(int i=0; i<hijoR1.genes.size(); i++){
-			hijoR1.genes.add(i, padreR1.genes.get(i));
-			hijoR2.genes.add(i, padreR2.genes.get(i));
+		for(int i=0; i<hijoR1.genes.length; i++){
+			hijoR1.genes[i] = padreR1.genes[i];
+			hijoR2.genes[i] = padreR2.genes[i];
 		}
 		
 		float probabilidadCruce = randomizer.nextFloat()*0.7f+0.1f;
 		
 		//	Hijo 1
-		for(int i=0; i<padreR2.genes.size(); i++){
+		for(int i=0; i<padreR2.genes.length; i++){
 			if(randomizer.nextFloat() < probabilidadCruce){
-				hijoR1.genes.add(i, padreR2.genes.get(i));
+				hijoR1.genes[i] = padreR2.genes[i];
 			}
 		}
 		
 		//	Hijo 2
-		for(int i=0; i<padreR1.genes.size(); i++){
+		for(int i=0; i<padreR1.genes.length; i++){
 			if(randomizer.nextFloat() < probabilidadCruce){
-				hijoR2.genes.add(i, padreR1.genes.get(i));
+				hijoR2.genes[i] = padreR1.genes[i];
 			}
 		}
 	}
@@ -62,9 +62,9 @@ abstract public class CromosomaReal extends Cromosoma{
 		CromosomaReal hijoR2 = (CromosomaReal) hijo2;
 		
 		//	Cruce Externo
-		for(int i=0; i<hijoR1.genes.size(); i++){
-			hijoR1.genes.add(i, padreR1.genes.get(i));
-			hijoR2.genes.add(i, padreR2.genes.get(i));
+		for(int i=0; i<hijoR1.genes.length; i++){
+			hijoR1.genes[i] = padreR1.genes[i];
+			hijoR2.genes[i] = padreR2.genes[i];
 		}
 		
 		int corte;
@@ -74,13 +74,13 @@ abstract public class CromosomaReal extends Cromosoma{
 		else corte = randomizer.nextInt(padreR1.getLongitudTotal()-1)+1;
 		
 		//	Hijo 1
-		for(int i=corte; i<padreR2.genes.size(); i++){
-			hijoR1.genes.add(i, padreR2.genes.get(i));
+		for(int i=corte; i<padreR2.genes.length; i++){
+			hijoR1.genes[i] = padreR2.genes[i];
 		}
 		
 		//	Hijo 2
-		for(int i=corte; i<padreR1.genes.size(); i++){
-			hijoR2.genes.add(i, padreR1.genes.get(i));
+		for(int i=corte; i<padreR1.genes.length; i++){
+			hijoR2.genes[i] = padreR1.genes[i];
 		}
 		
 	}
@@ -93,19 +93,19 @@ abstract public class CromosomaReal extends Cromosoma{
 		CromosomaReal hijoR1 = (CromosomaReal) hijo1;
 		CromosomaReal hijoR2 = (CromosomaReal) hijo2;
 		
-		for(int i=0; i<hijoR1.genes.size(); i++){
-			hijoR1.genes.add(i, padreR1.genes.get(i));
-			hijoR2.genes.add(i, padreR2.genes.get(i));
+		for(int i=0; i<hijoR1.genes.length; i++){
+			hijoR1.genes[i] = padreR1.genes[i];
+			hijoR2.genes[i] = padreR2.genes[i];
 		}
 		
 		float probabilidadCruce = randomizer.nextFloat()*0.9f+0.1f;
 		
 		//	Hijo 1 e Hijo 2
-		for(int i=0; i<padreR2.genes.size(); i++){
-			float result1 = (padreR2.genes.get(i) * probabilidadCruce + padreR1.genes.get(i) * (1-probabilidadCruce)) / 2.0f;
-			hijoR1.genes.add(i, result1);
-			float result2 = (padreR2.genes.get(i) * (1-probabilidadCruce) + padreR1.genes.get(i)*probabilidadCruce) / 2.0f;
-			hijoR2.genes.add(i, result2);
+		for(int i=0; i<padreR2.genes.length; i++){
+			float result1 = (padreR2.genes[i] * probabilidadCruce + padreR1.genes[i] * (1-probabilidadCruce)) / 2.0f;
+			hijoR1.genes[i] = result1;
+			float result2 = (padreR2.genes[i] * (1-probabilidadCruce) + padreR1.genes[i]*probabilidadCruce) / 2.0f;
+			hijoR2.genes[i] = result2;
 		}
 		
 	}
@@ -119,26 +119,26 @@ abstract public class CromosomaReal extends Cromosoma{
 		
 		int x = 2;
 		float beta = (float) (0.5f*(x+1.0f)*(Math.pow(randomizer.nextFloat(), x)));
-		for(int i=0; i<padreR1.genes.size(); i++){
-			float xmedia = (padreR1.genes.get(i) + padreR2.genes.get(i)) / 2.0f;
-			float sbx = 0.5f*beta*Math.abs(padreR1.genes.get(i) - padreR2.genes.get(i));
-			hijoR1.genes.set(i, xmedia-sbx);
-			hijoR2.genes.set(i, xmedia+sbx);
+		for(int i=0; i<padreR1.genes.length; i++){
+			float xmedia = (padreR1.genes[i] + padreR2.genes[i]) / 2.0f;
+			float sbx = 0.5f*beta*Math.abs(padreR1.genes[i] - padreR2.genes[i]);
+			hijoR1.genes[i] = xmedia-sbx;
+			hijoR2.genes[i] = xmedia+sbx;
 		}
 		
 	}
 	
 	public void mutar(Float probabilidad, Random randomizer){
-		for(int i=0; i<genes.size(); i++){
+		for(int i=0; i<genes.length; i++){
 			if(randomizer.nextFloat() < probabilidad){
 				float aleat = randomizer.nextFloat()+0.1f;
-				float result = (float) ((genes.get(i)+aleat)%Math.PI);
-				genes.set(i, result);
+				float result = (float) ((genes[i]+aleat)%Math.PI);
+				genes[i] = result;
 			}
 		}
 	}
 
-	abstract protected ArrayList<Float> getFenotipo();
+	abstract protected Float[] getFenotipo();
 
 	abstract protected Float getAptitud();
 

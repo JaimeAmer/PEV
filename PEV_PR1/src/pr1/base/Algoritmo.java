@@ -12,7 +12,7 @@ public class Algoritmo {
 
 	private Integer tamanoPoblacion;
 	private Integer simulaciones;
-	private ArrayList<Cromosoma> poblacion;
+	private Cromosoma[] poblacion;
 	private Float precision;
 	private Float probabilidadCruce;
 	private Float probabilidadMutacion;
@@ -21,7 +21,7 @@ public class Algoritmo {
 	private Integer n;
 	private Random randomizer;
 	private Integer numElites;
-	private ArrayList<Cromosoma> elites;
+	private Cromosoma[] elites;
 	private Integer participantes;
 	private Long semilla;
 	private String tipoSeleccion;
@@ -54,10 +54,10 @@ public class Algoritmo {
 			randomizer = new Random(semilla);
 		}
 		//	Inicializamos la poblacion
-		this.poblacion = new ArrayList<Cromosoma>(this.tamanoPoblacion);
+		this.poblacion = new Cromosoma[this.tamanoPoblacion];
 		for(int i=0; i<this.tamanoPoblacion; i++){
 			Cromosoma elem = FuncionFactory.getFuncion(funcion, precision, n, randomizer);
-			this.poblacion.add(i, elem);
+			this.poblacion[i] = elem;
 		}
 		
 		//	El mejor individuo lo elegimos aleatoriamente, solo por la grafica
@@ -65,26 +65,27 @@ public class Algoritmo {
 		this.valorMejor = 0f;
 		
 		if(this.elitismo.booleanValue()){
-			this.elites = new ArrayList<Cromosoma>(this.numElites);
+			this.elites = new Cromosoma[this.numElites];
 			for(int i=0; i<this.numElites; i++){
 				Cromosoma elem = FuncionFactory.getFuncion(funcion, precision, n, randomizer);
-				this.elites.add(i, elem);
+				this.elites[i] = elem;
 			}
 		}
 	}
 	
-	public String execute(ArrayList<Double> mejorAbsoluto, ArrayList<Double> mejorGeneracion, ArrayList<Double> mediaGeneracion){
-		ArrayList<Float> aptitudes = new ArrayList<Float>(this.tamanoPoblacion);
-		ArrayList<Float> aptitudesDesp = new ArrayList<Float>(this.tamanoPoblacion);
-		ArrayList<Float> puntuaciones = new ArrayList<Float>(this.tamanoPoblacion);
-		ArrayList<Float> puntuacionesAcum = new ArrayList<Float>(this.tamanoPoblacion);
+	public String execute(Double[] mejorAbsoluto, Double[] mejorGeneracion, Double[] mediaGeneracion){
+		Float[] aptitudes = new Float[this.tamanoPoblacion];
+		Float[] aptitudesDesp = new Float[this.tamanoPoblacion];
+		Float[] puntuaciones = new Float[this.tamanoPoblacion];
+		Float[] puntuacionesAcum = new Float[this.tamanoPoblacion];
 		
 		for(int i=0; i<this.simulaciones; i++){
-			ArrayList<Double> infogen = new ArrayList<Double>(2);// 0 mejor de la generacion, 1 media
-			evaluar(aptitudes, aptitudesDesp, puntuaciones, puntuacionesAcum, infogen, this.poblacion.get(0).esMaximizacion().booleanValue());
-			mejorAbsoluto.add(i, this.valorMejor.doubleValue());
-			mejorGeneracion.add(i, infogen.get(0));
-			mediaGeneracion.add(i, infogen.get(1));
+			Double[] infogen = new Double[2];// 0 mejor de la generacion, 1 media
+			evaluar(aptitudes, aptitudesDesp, puntuaciones, puntuacionesAcum, infogen, this.poblacion[0].esMaximizacion().booleanValue());
+			mejorAbsoluto[i] = this.valorMejor.doubleValue();
+			mejorGeneracion[i] = infogen[0];
+			mediaGeneracion[i] = infogen[1];
+			
 			
 			//	Seleccionamos el cruce
 			seleccionar(aptitudesDesp, puntuacionesAcum);
@@ -97,7 +98,7 @@ public class Algoritmo {
 			
 			//	Si hay elitismo, volvemos a evaluar para sustituir los peores por la elite
 			if(this.elitismo.booleanValue()){
-				evaluar(aptitudes, aptitudesDesp, puntuaciones, puntuacionesAcum, infogen, this.poblacion.get(0).esMaximizacion().booleanValue());
+				evaluar(aptitudes, aptitudesDesp, puntuaciones, puntuacionesAcum, infogen, this.poblacion[0].esMaximizacion().booleanValue());
 				introducirElites(aptitudesDesp);
 			}
 		}
@@ -105,7 +106,7 @@ public class Algoritmo {
 		return this.individuoMejor.toString();
 	}
 	
-	private void introducirElites(ArrayList<Float> aptitudes){
+	private void introducirElites(Float[] aptitudes){
 		Comparator<Par<Float, Integer>> cmp = new Comparator<Par<Float,Integer>>() {
 			@Override
 			public int compare(Par<Float, Integer> p1, Par<Float, Integer> p2){
@@ -122,12 +123,12 @@ public class Algoritmo {
 		PriorityQueue<Par<Float, Integer>> monticuloMin = new PriorityQueue<Par<Float, Integer>>(cmp);
 		for(int i=0; i<this.tamanoPoblacion; i++){
 			//	Posicion de los peores
-			this.poblacion.get(monticuloMin.poll().getValue()).copia(this.elites.get(i));
+			this.poblacion[monticuloMin.poll().getValue()].copia(this.elites[i]);
 		}
 	}
 	
 	//	Metodo que evalua la poblacion actual
-	private void evaluar(ArrayList<Float> aptitudes, ArrayList<Float> aptitudesDesp, ArrayList<Float> puntuaciones, ArrayList<Float> puntuacionesAcum, ArrayList<Double> infogen, Boolean maximizacion){
+	private void evaluar(Float[] aptitudes, Float[] aptitudesDesp, Float[] puntuaciones, Float[] puntuacionesAcum, Double[] infogen, Boolean maximizacion){
 		float sumAptitudesDesp = 0;
 		float sumAptitudes = 0;
 		float mejorAptitudEnGen = 0;
@@ -139,23 +140,23 @@ public class Algoritmo {
 			
 			//	Calculamos aptitudes
 			for(int i=0; i<this.tamanoPoblacion; i++){
-				aptitudes.set(i, this.poblacion.get(i).getAptitud().floatValue());
-				sumAptitudes += aptitudes.get(i);
+				aptitudes[i] = this.poblacion[i].getAptitud().floatValue();
+				sumAptitudes += aptitudes[i];
 				
 				//	Actualizamos el mejor
-				if(aptitudes.get(i) > mejorAptitudEnGen){
-					mejorAptitudEnGen = aptitudes.get(i);
+				if(aptitudes[i] > mejorAptitudEnGen){
+					mejorAptitudEnGen = aptitudes[i];
 					mejorCromosomaGen = i;
 				}
 				
 				//	Guardamos el mas pequeño
-				menorAptitud = Float.min(menorAptitud, aptitudes.get(i).floatValue());
+				menorAptitud = Float.min(menorAptitud, aptitudes[i]);
 			}
 			
 			//	Actualizamos el mejor global
 			if(mejorAptitudEnGen > this.valorMejor){
 				this.valorMejor = mejorAptitudEnGen;
-				this.individuoMejor.copia(this.poblacion.get(mejorCromosomaGen));
+				this.individuoMejor.copia(this.poblacion[mejorCromosomaGen]);
 			}
 			
 			desplazarAptitudes(aptitudes, aptitudesDesp, menorAptitud, maximizacion);
@@ -168,61 +169,61 @@ public class Algoritmo {
 			
 			//	Calculamos aptitudes
 			for(int i=0; i<this.tamanoPoblacion; i++){
-				aptitudes.add(i, this.poblacion.get(i).getAptitud().floatValue());
-				sumAptitudes += aptitudes.get(i);
+				aptitudes[i] = this.poblacion[i].getAptitud().floatValue();
+				sumAptitudes += aptitudes[i];
 				
 				//	Actualizamos el mejor
-				if(aptitudes.get(i) < mejorAptitudEnGen){
-					mejorAptitudEnGen = aptitudes.get(i);
+				if(aptitudes[i] < mejorAptitudEnGen){
+					mejorAptitudEnGen = aptitudes[i];
 					mejorCromosomaGen = i;
 				}
 				
 				//	Guardamos el mas grande
-				mayorAptitud = Float.max(mayorAptitud, aptitudes.get(i).floatValue());				
+				mayorAptitud = Float.max(mayorAptitud, aptitudes[i]);				
 			}
 			
 			//	Actualizamos el mejor global
 			if(mejorAptitudEnGen < this.valorMejor.floatValue()){
 				this.valorMejor = mejorAptitudEnGen;
-				this.individuoMejor.copia(this.poblacion.get(mejorCromosomaGen));
+				this.individuoMejor.copia(this.poblacion[mejorCromosomaGen]);
 			}
 			
 			desplazarAptitudes(aptitudes, aptitudesDesp, mayorAptitud, maximizacion);
 		}
 		
 		for(int i=0; i<this.tamanoPoblacion; i++){
-			sumAptitudesDesp += aptitudesDesp.get(i).floatValue();
+			sumAptitudesDesp += aptitudesDesp[i];
 		}
 		
 		//	Calculamos las puntuaciones para la seleccion
-		puntuaciones.add(0, aptitudesDesp.get(0).floatValue()/sumAptitudesDesp);
-		puntuacionesAcum.add(0, puntuaciones.get(0));
+		puntuaciones[0] = aptitudesDesp[0]/sumAptitudesDesp;
+		puntuacionesAcum[0] = puntuaciones[0];
 		
 		for(int i=1; i<this.tamanoPoblacion; i++){
-			puntuaciones.add(i, aptitudesDesp.get(i).floatValue()/sumAptitudesDesp);
-			puntuacionesAcum.add(i, puntuaciones.get(i).floatValue()+puntuacionesAcum.get(i-1).floatValue());
+			puntuaciones[i] = aptitudesDesp[i]/sumAptitudesDesp;
+			puntuacionesAcum[i] = puntuaciones[i]+puntuacionesAcum[i-1];
 		}
-		puntuacionesAcum.set(this.tamanoPoblacion-1, 1f); // Asegurarse que el ultimo valor es 1
+		puntuacionesAcum[this.tamanoPoblacion-1] = 1f; // Asegurarse que el ultimo valor es 1
 		
 		//	Informacion de la generacion
-		infogen.add(0, (double) mejorAptitudEnGen);
-		infogen.add(1, (double) (sumAptitudes/this.tamanoPoblacion));
+		infogen[0] = (double) mejorAptitudEnGen;
+		infogen[1] = (double) (sumAptitudes/this.tamanoPoblacion);
 		
 	}
 	
-	private void desplazarAptitudes(ArrayList<Float> aptitudes, ArrayList<Float> aptitudesDesp, float aptitud, boolean maximizacion){
+	private void desplazarAptitudes(Float[] aptitudes, Float[] aptitudesDesp, Float aptitud, Boolean maximizacion){
 		if(maximizacion){
-			for(int i=0; i<aptitudes.size(); i++){
-				aptitudesDesp.add(i, aptitudes.get(i).floatValue()+aptitud);
+			for(int i=0; i<aptitudes.length; i++){
+				aptitudesDesp[i] = aptitudes[i]+aptitud;
 			}
 		}
-		else for(int i=0; i<aptitudes.size(); i++){
-			aptitudesDesp.add(i, aptitud-aptitudes.get(i).floatValue());
+		else for(int i=0; i<aptitudes.length; i++){
+			aptitudesDesp[i] = aptitud-aptitudes[i];
 		}
 	}
 	
 	// Metodo que decide los cromosomas que se cruzan en funcion del algoritmo de seleccion
-	private void seleccionar(ArrayList<Float> aptitudes, ArrayList<Float> puntuacionesAcum){
+	private void seleccionar(Float[] aptitudes, Float[] puntuacionesAcum){
 		//	Si hay elitismo, buscamos la elite
 		if(this.elitismo.booleanValue()){
 			Comparator<Par<Float, Integer>> cmp = new Comparator<Par<Float,Integer>>() {
@@ -241,20 +242,20 @@ public class Algoritmo {
 			PriorityQueue<Par<Float, Integer>> monticuloMax = new PriorityQueue<Par<Float, Integer>>(cmp);
 			
 			for(int i=0; i<this.tamanoPoblacion; i++){
-				Par<Float, Integer> p = new Par<Float, Integer>(aptitudes.get(i), i);
+				Par<Float, Integer> p = new Par<Float, Integer>(aptitudes[i], i);
 				monticuloMax.add(p);
 			}
 			
 			//	Guardamos los elites
 			for(int i=0; i<this.numElites; i++){
-				this.elites.get(i).copia(this.poblacion.get(monticuloMax.poll().getValue()));
+				this.elites[i].copia(this.poblacion[monticuloMax.poll().getValue()]);
 			}
 		}
 		
-		ArrayList<Cromosoma> seleccionados = new ArrayList<Cromosoma>(this.tamanoPoblacion);
+		Cromosoma[] seleccionados = new Cromosoma[this.tamanoPoblacion];
 		for(int i=0; i<this.tamanoPoblacion; i++){
 			Cromosoma elem = FuncionFactory.getFuncion(funcion, precision, n, randomizer);
-			seleccionados.add(i, elem);
+			seleccionados[i] = elem;
 		}
 		
 		//	Construimos el algoritmo elegido
@@ -267,12 +268,12 @@ public class Algoritmo {
 	//	Metodo que cruza la poblacion
 	private void cruzar(){
 		int numSeleccionados = 0;
-		ArrayList<Integer> cruzar = new ArrayList<Integer>(this.tamanoPoblacion);
+		int[] cruzar = new int[this.tamanoPoblacion];
 		
 		//	Obtenemos los cromosomas
 		for(int i=0; i<this.tamanoPoblacion; i++){
 			if(randomizer.nextFloat() < this.probabilidadCruce){
-				cruzar.add(numSeleccionados, i);
+				cruzar[numSeleccionados] = i;
 				numSeleccionados++;
 			}
 		}
@@ -286,20 +287,20 @@ public class Algoritmo {
 		for(int i=0; i<numSeleccionados/2; i++){
 			Cromosoma h1 = FuncionFactory.getFuncion(funcion, precision, n, randomizer);
 			Cromosoma h2 = FuncionFactory.getFuncion(funcion, precision, n, randomizer);
-			Cromosoma p1 = this.poblacion.get(cruzar.get(i));
-			Cromosoma p2 = this.poblacion.get(cruzar.get(i+1));
+			Cromosoma p1 = this.poblacion[cruzar[i]];
+			Cromosoma p2 = this.poblacion[cruzar[i+1]];
 			Cromosoma.cruzar(p1, p2, h1, h2, randomizer, this.tipoSeleccion);
 			
 			//	Sustituimos a los padres
-			this.poblacion.set(cruzar.get(i), h1);
-			this.poblacion.set(cruzar.get(i+1), h2);
+			this.poblacion[cruzar[i]] = h1;
+			this.poblacion[cruzar[i+1]] = h2;
 		}
 	}
 	
 	//	Metodo que muta la poblacion
 	private void mutar(){
 		for(int i=0; i<this.tamanoPoblacion; i++){
-			this.poblacion.get(i).mutar(probabilidadMutacion, randomizer);
+			this.poblacion[i].mutar(probabilidadMutacion, randomizer);
 		}
 	}
 	

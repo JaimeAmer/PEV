@@ -5,6 +5,6 @@ import java.util.Random;
 
 public interface AlgoritmoSeleccion {
 
-	void seleccionar(ArrayList<Float> aptitudes, ArrayList<Float> puntuacionesAcumuladas, ArrayList<Cromosoma> seleccionados, Integer tamanoPoblacion, ArrayList<Cromosoma> poblacion, Boolean minimizacion, Random randomizer);
+	void seleccionar(Float[] aptitudes, Float[] puntuacionesAcumuladas, Cromosoma[] seleccionados, Integer tamanoPoblacion, Cromosoma[] poblacion, Boolean minimizacion, Random randomizer);
 
 }

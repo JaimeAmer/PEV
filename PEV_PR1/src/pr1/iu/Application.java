@@ -26,9 +26,9 @@ public class Application {
 		
 		// COMPROBAR PARAMETROS BIEN COLOCADOS
 		Algoritmo algoritmo = new Algoritmo(tamanoPoblacion, precision, probabilidadCruce, probabilidadMutacion, funcion, numGeneraciones, semilla, participantes, n, elitismo, tipoAlgoritmo, metodoSeleccion);
-		ArrayList<Double> mejorAbsoluto = new ArrayList<Double>(numGeneraciones);
-		ArrayList<Double> mejorGeneracion = new ArrayList<Double>(numGeneraciones);
-		ArrayList<Double> mediaGeneracion = new ArrayList<Double>(numGeneraciones);
+		Double[] mejorAbsoluto = new Double[numGeneraciones];
+		Double[] mejorGeneracion = new Double[numGeneraciones];
+		Double[] mediaGeneracion = new Double[numGeneraciones];
 		
 		//	Ejecucion del algoritmo
 		String result = algoritmo.execute(mejorAbsoluto, mejorGeneracion, mediaGeneracion);

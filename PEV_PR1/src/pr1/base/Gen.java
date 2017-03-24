@@ -6,19 +6,19 @@ import java.util.Vector;
 
 
 public class Gen {
-	private Vector<Boolean> alelo;
+	private Boolean[] alelo;
 	
 	public Gen(Integer n, Random randomizer){
-		this.alelo = new Vector<Boolean>();
+		this.alelo = new Boolean[n];
 		for(int i=0; i<n; i++)
-			alelo.insertElementAt(randomizer.nextBoolean(), i);
+			alelo[i] = randomizer.nextBoolean();
 	}
 	
-	public Vector<Boolean> getAlelo(){
+	public Boolean[] getAlelo(){
 		return this.alelo;
 	}
 	
-	public void setAlelo(Vector<Boolean> genesHijo){
+	public void setAlelo(Boolean[] genesHijo){
 		this.alelo = genesHijo;
 	}
 }

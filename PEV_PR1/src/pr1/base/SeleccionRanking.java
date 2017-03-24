@@ -10,10 +10,10 @@ public class SeleccionRanking implements AlgoritmoSeleccion{
 	private final Float beta = 1.5f;
 	
 	@Override
-	public void seleccionar(ArrayList<Float> aptitudes,
-			ArrayList<Float> puntuacionesAcumuladas,
-			ArrayList<Cromosoma> seleccionados, Integer tamanoPoblacion,
-			ArrayList<Cromosoma> poblacion, Boolean minimizacion, Random randomizer) {
+	public void seleccionar(Float[] aptitudes,
+			Float[] puntuacionesAcumuladas,
+			Cromosoma[] seleccionados, Integer tamanoPoblacion,
+			Cromosoma[] poblacion, Boolean minimizacion, Random randomizer) {
 				
 		Comparator<Par<Float, Integer> > cmp = new Comparator<Par<Float, Integer>>(){
 			public int compare(Par<Float, Integer> p1, Par<Float, Integer> p2){
@@ -29,32 +29,32 @@ public class SeleccionRanking implements AlgoritmoSeleccion{
 		
 		PriorityQueue<Par<Float, Integer>> monticuloMax = new PriorityQueue<Par<Float, Integer>>(cmp);
 		
-		for(int i=0; i<aptitudes.size(); i++){
-			Par<Float, Integer> par = new Par<Float, Integer>(aptitudes.get(i), i);
+		for(int i=0; i<aptitudes.length; i++){
+			Par<Float, Integer> par = new Par<Float, Integer>(aptitudes[i], i);
 			monticuloMax.add(par);
 		}
 		
-		ArrayList<Integer> indicesOrd = new ArrayList<Integer>(poblacion.size());
+		Integer[] indicesOrd = new Integer[poblacion.length];
 		
 		for(int i=0; !monticuloMax.isEmpty(); i++){
-			indicesOrd.add(i, monticuloMax.poll().getValue());
+			indicesOrd[i] = monticuloMax.poll().getValue();
 		}
 		
-		ArrayList<Float> probabilidades = new ArrayList<Float>(poblacion.size());
-		for(int i=0; i<probabilidades.size(); i++){
-			float prob = (1.0f / probabilidades.size()) * (beta-2*(beta-1)*(i-1.0f)/probabilidades.size()-1);
-			probabilidades.add(i, prob);
+		Float[] probabilidades = new Float[poblacion.length];
+		for(int i=0; i<probabilidades.length; i++){
+			float prob = (1.0f / probabilidades.length) * (beta-2*(beta-1)*(i-1.0f)/probabilidades.length-1);
+			probabilidades[i] = prob;
 		}
 		
-		for(int i=0; i<seleccionados.size(); i++){
+		for(int i=0; i<seleccionados.length; i++){
 			float aleatorio = randomizer.nextFloat();
-			float sumaProb = probabilidades.get(0).floatValue();
+			float sumaProb = probabilidades[0].floatValue();
 			int j=1;
-			for(; i<probabilidades.size()-1 && aleatorio > sumaProb; j++){
-				sumaProb += probabilidades.get(j).floatValue();
+			for(; i<probabilidades.length-1 && aleatorio > sumaProb; j++){
+				sumaProb += probabilidades[j].floatValue();
 			}
 			
-			seleccionados.get(i).copia(poblacion.get(indicesOrd.get(j)));
+			seleccionados[i].copia(poblacion[indicesOrd[j]]);
 		}
 		
 		

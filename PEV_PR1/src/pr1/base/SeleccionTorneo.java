@@ -12,32 +12,32 @@ public class SeleccionTorneo implements AlgoritmoSeleccion{
 	}
 
 	@Override
-	public void seleccionar(ArrayList<Float> aptitudes,
-			ArrayList<Float> puntuacionesAcumuladas,
-			ArrayList<Cromosoma> seleccionados, Integer tamanoPoblacion,
-			ArrayList<Cromosoma> poblacion, Boolean minimizacion,
+	public void seleccionar(Float[] aptitudes,
+			Float[] puntuacionesAcumuladas,
+			Cromosoma[] seleccionados, Integer tamanoPoblacion,
+			Cromosoma[] poblacion, Boolean minimizacion,
 			Random randomizer) {
 		
-		ArrayList<Float> elegidosValue = new ArrayList<Float>(participantes);
-		ArrayList<Integer> elegidosIndex = new ArrayList<Integer>(participantes);
+		Float[] elegidosValue = new Float[participantes];
+		Integer[] elegidosIndex = new Integer[participantes];
 		
 		for(int i=0; i<tamanoPoblacion; i++){
 			for(int j=0; j<participantes; j++){
 				int indiceAleat = randomizer.nextInt(tamanoPoblacion);
-				elegidosValue.add(j, aptitudes.get(indiceAleat));
-				elegidosIndex.add(j, indiceAleat);
+				elegidosValue[j] = aptitudes[indiceAleat];
+				elegidosIndex[j] = indiceAleat;
 			}
 			
 			float maximoValor = Integer.MIN_VALUE;
 			int maximo = 0;
 			for(int j=0; j<participantes; j++){
-				if(elegidosValue.get(j).floatValue() > maximoValor){
-					maximoValor = elegidosValue.get(j).floatValue();
+				if(elegidosValue[j].floatValue() > maximoValor){
+					maximoValor = elegidosValue[j].floatValue();
 					maximo = j;
 				}
 			}
 			
-			seleccionados.get(i).copia(poblacion.get(elegidosIndex.get(maximo)));
+			seleccionados[i].copia(poblacion[elegidosIndex[maximo]]);
 		}
 	}
 }

@@ -15,33 +15,33 @@ public class Funcion4 extends Cromosoma{
 	
 	public Funcion4(float precision, int n, Random randomizer){
 		this.n = n;
-		longitud = new ArrayList<Integer>(this.n);
+		longitud = new Integer[this.n];
 		for(int i=0; i<this.n; i++){
 			int aux = (int) Math.ceil(((Math.log(1+(x_maximo-x_minimo)/precision))/Math.log(2)));
-			longitud.set(i, aux);
+			longitud[i] = aux;
 		}
 		
-		genes = new ArrayList<Gen>(this.n);
+		genes = new Gen[this.n];
 		for(int i=0; i<this.n; i++){
-			genes.set(i, new Gen(longitud.get(i), randomizer));
+			genes[i] = new Gen(longitud[i], randomizer);
 		}
 		
 		maximizar = false;
 	}
 	
 	@Override
-	protected ArrayList<Float> getFenotipo() {
-		ArrayList<Float> array = new ArrayList<Float>(n);
+	protected Float[] getFenotipo() {
+		Float[] array = new Float[n];
 		for(int i=0; i<n; i++){
-			float result = (float) (x_minimo+(x_maximo-x_minimo)*valorGen(genes.get(i))/(Math.pow(2, longitud.get(i))-1));
-			array.set(i, result);
+			float result = (float) (x_minimo+(x_maximo-x_minimo)*valorGen(genes[i])/(Math.pow(2, longitud[i])-1));
+			array[i] = result;
 		}
 		
 		return array;
 	}
 	
 	private float getFenotipo(int pos){
-		float f = (float) (x_minimo+(x_maximo-x_minimo)*valorGen(genes.get(pos))/(Math.pow(2, longitud.get(pos))-1));
+		float f = (float) (x_minimo+(x_maximo-x_minimo)*valorGen(genes[pos])/(Math.pow(2, longitud[pos])-1));
 		return f;
 	}
 
@@ -64,7 +64,7 @@ public class Funcion4 extends Cromosoma{
 	public String toString(){
 		String s = "Valor mejor: " + getAptitud();
 		for(int i=0; i<n; i++){
-			s += ", x" + (i+1) + " = " + getFenotipo().get(i);
+			s += ", x" + (i+1) + " = " + getFenotipo()[i];
 		}
 		
 		return s;

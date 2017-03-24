@@ -12,14 +12,14 @@ public class SeleccionEstocasticoUniversal implements AlgoritmoSeleccion{
 	}
 
 	@Override
-	public void seleccionar(ArrayList<Float> aptitudes,
-			ArrayList<Float> puntuacionesAcumuladas,
-			ArrayList<Cromosoma> seleccionados, Integer tamanoPoblacion,
-			ArrayList<Cromosoma> poblacion, Boolean minimizacion,
+	public void seleccionar(Float[] aptitudes,
+			Float[] puntuacionesAcumuladas,
+			Cromosoma[] seleccionados, Integer tamanoPoblacion,
+			Cromosoma[] poblacion, Boolean minimizacion,
 			Random randomizer) {
 		
-		ArrayList<Float> elegidosValue = new ArrayList<Float>(participantes);
-		ArrayList<Integer> elegidosIndex = new ArrayList<Integer>(participantes);
+		Float[] elegidosValue = new Float[participantes];
+		Integer[] elegidosIndex = new Integer[participantes];
 		/*
 		for(int i=0; i<tamanoPoblacion; i++){
 			for(int j=0; j<participantes; j++){

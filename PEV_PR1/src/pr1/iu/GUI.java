@@ -253,10 +253,15 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>    
     
+    private void executeFuncion4(){
+    	
+    }
     
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-
+    private void executeFuncion4R(){
+    	
+    }
+    
+    private void execute(){
     	float precision = Float.parseFloat(this.jTextField4.getText());
 		float probabilidadCruce = Float.parseFloat(this.jTextField2.getText());
 		float probabilidadMutacion = Float.parseFloat(this.jTextField3.getText());
@@ -266,16 +271,32 @@ public class GUI extends javax.swing.JFrame {
 		int tamanoPoblacion = Integer.parseInt(this.jTextField1.getText());
 		int numGeneraciones = Integer.parseInt(this.jTextField5.getText());
 		long semilla = Long.parseLong(this.jTextField6.getText());
-		int participantes = Integer.parseInt(this.jTextField8.getText());
+		int participantes = 0;
 		int n = Integer.parseInt(this.jTextField7.getText());
 		String tipoAlgoritmo = this.jComboBox3.getSelectedItem().toString();
+		if(this.jComboBox2.getSelectedItem().toString().equals("Torneo")){
+			participantes = Integer.parseInt(this.jTextField8.getText());
+		}
 		
 		if(semilla == 0)
 			this.semilla = System.currentTimeMillis();
 
     	app.init(precision, probabilidadCruce, probabilidadMutacion, metodoSeleccion, elitismo, funcion, tamanoPoblacion, numGeneraciones, semilla, n, participantes, tipoAlgoritmo);
     
-    
+    }
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    	switch(this.jComboBox1.getSelectedItem().toString()){
+    	case "Funcion 4":
+    		executeFuncion4();
+    		break;
+    	case "Funcion 4-R":
+    		executeFuncion4R();
+    		break;
+    	default:
+    		execute();
+    		break;
+    	}
     }                                        
 
                                              
@@ -295,15 +316,15 @@ public class GUI extends javax.swing.JFrame {
     	this.jTextArea1.setText(texto);
     }
     
-    public void addPlot(ArrayList<Double> y, String titulo, Color color){
-		double[] auxX = new double[y.size()];
+    public void addPlot(Double[] y, String titulo, Color color){
+		double[] auxX = new double[y.length];
 		for(int i=0; i<auxX.length; i++){
 			auxX[i] = i;
 		}
 		
-		double[] auxY = new double[y.size()];
-		for(int i=0; i<y.size(); i++){
-			auxY[i] = y.get(i);
+		double[] auxY = new double[y.length];
+		for(int i=0; i<y.length; i++){
+			auxY[i] = y[i];
 		}
 		
 		plot2DPanel1.addLinePlot(titulo, color, auxX, auxY);
