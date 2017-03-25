@@ -61,7 +61,7 @@ public class Funcion4 extends Cromosoma{
 	}
 	
 	public String toString(){
-		String s = "Valor mejor: " + getAptitud();
+		String s = "Valor mejor: f(x)= " + getAptitud();
 		for(int i=0; i<n; i++){
 			s += ", x" + (i+1) + " = " + getFenotipo()[i];
 		}

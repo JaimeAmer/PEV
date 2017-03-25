@@ -270,7 +270,7 @@ public class GUI extends javax.swing.JFrame {
         plot2DPanel2.addLinePlot("Mejor Absoluto", Color.RED, x, y);
         plot2DPanel2.addLinePlot("Mejor Generacion", Color.BLUE, x, y);
         plot2DPanel2.addLinePlot("Media Generacion", Color.GREEN, x, y);
-        
+        this.setResizable(false);
         pack();
     }// </editor-fold>    
     
@@ -375,6 +375,7 @@ public class GUI extends javax.swing.JFrame {
     					"\n" +
     					resultado;
     	this.jTextArea1.setText(texto);
+    	this.pack();
     }
     
     public void addPlot(Double[] y, String titulo, Color color){
@@ -393,6 +394,7 @@ public class GUI extends javax.swing.JFrame {
     
     public void resetPlots(){
     	plot2DPanel2.removeAllPlots();
+    	
     }
 
     // Variables declaration - do not modify          

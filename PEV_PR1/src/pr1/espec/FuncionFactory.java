@@ -19,7 +19,7 @@ public class FuncionFactory {
 		case "Funcion 5":
 			return new Funcion5(precision, randomizer);
 		case "Funcion 4-R":
-			return null;
+			return new Funcion4R(precision, n, randomizer);
 		default:
 			return new Funcion1(precision, randomizer);
 		}
