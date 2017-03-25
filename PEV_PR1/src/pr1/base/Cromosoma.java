@@ -72,11 +72,11 @@ public abstract class Cromosoma {
 	static public void cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer, String cruce){
 		if(padre1 instanceof CromosomaReal){
 			switch(cruce){
-			case "DiscretoUniforme":
+			case "Discreto Uniforme":
 				CromosomaReal.cruzarRealDiscretoUniforme(padre1, padre2, hijo1, hijo2, randomizer);
 				break;
-			case "Externo":
-				CromosomaReal.cruzarRealExterno(padre1, padre2, hijo1, hijo2, randomizer);
+			case "Monopunto":
+				CromosomaReal.cruzarRealMonoPunto(padre1, padre2, hijo1, hijo2, randomizer);
 				break;
 			case "Aritmetico":
 				CromosomaReal.cruzarRealAritmetico(padre1, padre2, hijo1, hijo2, randomizer);

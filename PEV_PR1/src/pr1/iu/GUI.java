@@ -143,7 +143,7 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel11.setText("Tipo de Algoritmo (Solo en Funcion 4-R)");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Externo", "Discreto Uniforme", "Aritmetico", "SBX" }));
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<String>(new String[] { "Monopunto", "Discreto Uniforme", "Aritmetico", "SBX" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

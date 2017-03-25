@@ -52,7 +52,7 @@ abstract public class CromosomaReal extends Cromosoma{
 		}
 	}
 
-	public static void cruzarRealExterno(Cromosoma padre1, Cromosoma padre2,
+	public static void cruzarRealMonoPunto(Cromosoma padre1, Cromosoma padre2,
 			Cromosoma hijo1, Cromosoma hijo2, Random randomizer) {
 		
 		CromosomaReal padreR1 = (CromosomaReal) padre1;

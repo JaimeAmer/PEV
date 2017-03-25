@@ -17,7 +17,7 @@ public class Funcion1 extends Cromosoma{
 		int numBits = (int) Math.ceil(((Math.log(1+(maximo-minimo)/precision))/Math.log(2)));
 		longitud[0] = numBits;
 		genes = new Gen[1];
-		genes[0] = new Gen(numBits, randomizer);		
+		genes[0] = new Gen(numBits, randomizer);	
 		maximizar = false;
 	}
 
