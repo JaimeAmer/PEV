@@ -33,7 +33,10 @@ public class Application {
 		//	Ejecucion del algoritmo
 		String result = algoritmo.execute(mejorAbsoluto, mejorGeneracion, mediaGeneracion);
 		
-		gui.setResultado(result, t);
+		t = (System.currentTimeMillis()-t)/1000;
+		
+		gui.setResultado(result, t, semilla);
+		gui.resetPlots();
 		gui.addPlot(mejorAbsoluto, "Mejor Absoluto", Color.RED);
 		gui.addPlot(mejorGeneracion, "Mejor Generacion", Color.BLUE);
 		gui.addPlot(mediaGeneracion, "Media Generacion", Color.GREEN);

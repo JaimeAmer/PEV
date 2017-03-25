@@ -10,6 +10,9 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 /**
  *
  * @author BOOTCAMP
@@ -17,12 +20,23 @@ import java.util.ArrayList;
 public class GUI extends javax.swing.JFrame {
 
 	private Application app;
-	private Object semilla;
     /**
      * Creates new form GUI
      */
     public GUI(Application app) {
-        initComponents();
+    	try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+    	
+    	initComponents();
         this.app = app;
     }
 
@@ -80,15 +94,15 @@ public class GUI extends javax.swing.JFrame {
 
         jLabel1.setText("Tam. Poblacion");
 
-        jTextField1.setText("");
+        jTextField1.setText("100");
 
         jLabel2.setText("Prob. Cruce");
 
-        jTextField2.setText("");
+        jTextField2.setText("60");
 
         jLabel3.setText("Prob. Mutacion");
 
-        jTextField3.setText("");
+        jTextField3.setText("5");
 
         jLabel4.setText("Precision");
 
@@ -105,15 +119,15 @@ public class GUI extends javax.swing.JFrame {
         jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Output"));
         jScrollPane1.setViewportView(jTextArea1);
 
-        jTextField4.setText("");
+        jTextField4.setText("0.0001");
 
-        jTextField5.setText("");
+        jTextField5.setText("100");
 
-        jTextField6.setText("");
+        jTextField6.setText("0");
 
-        jTextField7.setText("");
+        jTextField7.setText("1");
 
-        jTextField8.setText("");
+        jTextField8.setText("2");
 
         jCheckBox1.setText("Elitismo");
         
@@ -263,8 +277,8 @@ public class GUI extends javax.swing.JFrame {
     
     private void execute(){
     	float precision = Float.parseFloat(this.jTextField4.getText());
-		float probabilidadCruce = Float.parseFloat(this.jTextField2.getText());
-		float probabilidadMutacion = Float.parseFloat(this.jTextField3.getText());
+		float probabilidadCruce = Float.parseFloat(this.jTextField2.getText()) / 100;
+		float probabilidadMutacion = Float.parseFloat(this.jTextField3.getText()) / 100;
 		String metodoSeleccion = this.jComboBox2.getSelectedItem().toString();
 		String funcion = this.jComboBox2.getSelectedItem().toString();
 		boolean elitismo = this.jCheckBox1.isSelected();
@@ -279,7 +293,7 @@ public class GUI extends javax.swing.JFrame {
 		}
 		
 		if(semilla == 0)
-			this.semilla = System.currentTimeMillis();
+			semilla = System.currentTimeMillis();
 
     	app.init(precision, probabilidadCruce, probabilidadMutacion, metodoSeleccion, elitismo, funcion, tamanoPoblacion, numGeneraciones, semilla, n, participantes, tipoAlgoritmo);
     
@@ -307,10 +321,10 @@ public class GUI extends javax.swing.JFrame {
      */
     
     
-    public void setResultado(String resultado, Long t){
+    public void setResultado(String resultado, Long t, Long semilla){
     	
-    	String texto = "Generado en: " + t.toString() + "\n" + 
-    					"Ultima semilla utilizada: " + this.semilla.toString() + "\n" +
+    	String texto = "Generado en: " + t.floatValue() + "seg." + "\n" + 
+    					"Ultima semilla utilizada: " + semilla + "\n" +
     					"\n" +
     					resultado;
     	this.jTextArea1.setText(texto);
@@ -327,8 +341,12 @@ public class GUI extends javax.swing.JFrame {
 			auxY[i] = y[i];
 		}
 		
-		plot2DPanel1.addLinePlot(titulo, color, auxX, auxY);
+		plot2DPanel2.addLinePlot(titulo, color, auxX, auxY);
 	}
+    
+    public void resetPlots(){
+    	plot2DPanel2.removeAllPlots();
+    }
 
     // Variables declaration - do not modify                     
     private org.math.io.parser.ArrayString arrayString1;

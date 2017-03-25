@@ -50,7 +50,7 @@ public class SeleccionRanking implements AlgoritmoSeleccion{
 			float aleatorio = randomizer.nextFloat();
 			float sumaProb = probabilidades[0].floatValue();
 			int j=1;
-			for(; i<probabilidades.length-1 && aleatorio > sumaProb; j++){
+			for(; i<probabilidades.length -1 && aleatorio > sumaProb; j++){
 				sumaProb += probabilidades[j].floatValue();
 			}
 			
