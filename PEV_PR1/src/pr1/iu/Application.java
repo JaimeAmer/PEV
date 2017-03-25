@@ -1,14 +1,8 @@
 package pr1.iu;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
-import org.math.plot.*;
-
-import es.ucm.fdi.pe.*;
-import pr1.base.*;
+import pr1.base.Algoritmo;
 
 public class Application {
 	

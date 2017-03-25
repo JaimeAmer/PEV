@@ -18,7 +18,7 @@ public class Gen {
 		return this.alelo;
 	}
 	
-	public void setAlelo(Boolean[] genesHijo){
-		this.alelo = genesHijo;
+	public void setAlelo(Boolean[] alelos){
+		this.alelo = alelos.clone();
 	}
 }

@@ -25,7 +25,7 @@ public class Funcion2 extends Cromosoma{
 		genes[0] = new Gen(x_r, randomizer);
 		genes[1] = new Gen(y_r, randomizer);
 		
-		maximizar = true;
+		maximizar = false;
 		
 	}
 	

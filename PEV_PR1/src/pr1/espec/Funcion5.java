@@ -24,6 +24,8 @@ public class Funcion5 extends Cromosoma{
 		genes = new Gen[2];
 		genes[0] = new Gen(x_r, randomizer);
 		genes[1] = new Gen(y_r, randomizer);
+		
+		maximizar = false;
 	}
 	
 	@Override

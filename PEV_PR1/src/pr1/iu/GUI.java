@@ -49,9 +49,6 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        plot2DPanel1 = new org.math.plot.Plot2DPanel();
-        arrayString1 = new org.math.io.parser.ArrayString();
-        histogram1 = new org.math.plot.utils.Histogram();
         plot2DPanel2 = new org.math.plot.Plot2DPanel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -84,7 +81,8 @@ public class GUI extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(1280, 720));
 
         plot2DPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Grafica"));
-
+        plot2DPanel2.addLegend("SOUTH");
+        
         jButton1.setText("Simular");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,15 +278,15 @@ public class GUI extends javax.swing.JFrame {
 		float probabilidadCruce = Float.parseFloat(this.jTextField2.getText()) / 100;
 		float probabilidadMutacion = Float.parseFloat(this.jTextField3.getText()) / 100;
 		String metodoSeleccion = this.jComboBox2.getSelectedItem().toString();
-		String funcion = this.jComboBox2.getSelectedItem().toString();
+		String funcion = this.jComboBox1.getSelectedItem().toString();
 		boolean elitismo = this.jCheckBox1.isSelected();
 		int tamanoPoblacion = Integer.parseInt(this.jTextField1.getText());
 		int numGeneraciones = Integer.parseInt(this.jTextField5.getText());
 		long semilla = Long.parseLong(this.jTextField6.getText());
 		int participantes = 0;
 		int n = Integer.parseInt(this.jTextField7.getText());
-		String tipoAlgoritmo = this.jComboBox3.getSelectedItem().toString();
-		if(this.jComboBox2.getSelectedItem().toString().equals("Torneo")){
+		String tipoAlgoritmo = "";
+		if(this.jComboBox2.getSelectedItem().toString().split(" ")[0].equals("Torneo")){
 			participantes = Integer.parseInt(this.jTextField8.getText());
 		}
 		
@@ -333,7 +331,7 @@ public class GUI extends javax.swing.JFrame {
     public void addPlot(Double[] y, String titulo, Color color){
 		double[] auxX = new double[y.length];
 		for(int i=0; i<auxX.length; i++){
-			auxX[i] = i;
+			auxX[i] = i+1;
 		}
 		
 		double[] auxY = new double[y.length];
@@ -348,9 +346,7 @@ public class GUI extends javax.swing.JFrame {
     	plot2DPanel2.removeAllPlots();
     }
 
-    // Variables declaration - do not modify                     
-    private org.math.io.parser.ArrayString arrayString1;
-    private org.math.plot.utils.Histogram histogram1;
+    // Variables declaration - do not modify          
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox jComboBox1;
@@ -377,7 +373,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
-    private org.math.plot.Plot2DPanel plot2DPanel1;
     private org.math.plot.Plot2DPanel plot2DPanel2;
     // End of variables declaration                   
 }

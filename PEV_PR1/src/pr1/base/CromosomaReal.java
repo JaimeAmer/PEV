@@ -1,6 +1,5 @@
 package pr1.base;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 abstract public class CromosomaReal extends Cromosoma{
