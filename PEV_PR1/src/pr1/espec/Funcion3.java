@@ -53,7 +53,7 @@ public class Funcion3 extends Cromosoma{
 	}
 	
 	public String toString(){
-		return "Valor mejor: f(x,y)= " + getAptitud() + " , en x= " + getFenotipo()[0] + ", y= " + getFenotipo()[1];
+		return "Valor mejor: f(x,y)= " + getAptitud() + " , en x = " + getFenotipo()[0] + ", y = " + getFenotipo()[1];
 	}
 
 }
