@@ -1,6 +1,5 @@
 package pr1.espec;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import pr1.base.Cromosoma;
@@ -53,7 +52,7 @@ public class Funcion4 extends Cromosoma{
 			result += Math.sin(x)*Math.pow(Math.sin((i+1)*Math.pow(x, 2)/Math.PI), 20);
 		}
 		
-		return -1*result;
+		return -result;
 	}
 
 	@Override

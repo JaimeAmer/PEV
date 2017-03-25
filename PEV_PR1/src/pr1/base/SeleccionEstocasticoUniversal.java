@@ -1,6 +1,5 @@
 package pr1.base;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class SeleccionEstocasticoUniversal implements AlgoritmoSeleccion{

@@ -120,7 +120,11 @@ public class Algoritmo {
 		
 		PriorityQueue<Par<Float, Integer>> monticuloMin = new PriorityQueue<Par<Float, Integer>>(cmp);
 		for(int i=0; i<this.tamanoPoblacion; i++){
-			//	Posicion de los peores
+			Par<Float, Integer> elem = new Par<Float, Integer>(aptitudes[i], i);
+			monticuloMin.add(elem);
+		}
+		
+		for(int i=0; i<this.numElites; i++){
 			this.poblacion[monticuloMin.poll().getValue()].copia(this.elites[i]);
 		}
 	}

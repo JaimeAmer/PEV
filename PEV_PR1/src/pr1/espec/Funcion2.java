@@ -1,6 +1,5 @@
 package pr1.espec;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import pr1.base.Cromosoma;
@@ -9,21 +8,21 @@ import pr1.base.Gen;
 
 public class Funcion2 extends Cromosoma{
 
-	private final float x_minimo = -512;
-	private final float x_maximo = 512;
-	private final float y_minimo = -512;
-	private final float y_maximo = 512;
+	private final float x1_minimo = -512;
+	private final float x1_maximo = 512;
+	private final float x2_minimo = -512;
+	private final float x2_maximo = 512;
 	
 	public Funcion2(float precision, Random randomizer){
 		longitud = new Integer[2];
-		int x_r = (int) Math.ceil(((Math.log(1+(x_maximo-x_minimo)/precision))/Math.log(2)));
-		int y_r = (int) Math.ceil(((Math.log(1+(y_maximo-y_minimo)/precision))/Math.log(2)));
-		longitud[0] = x_r;
-		longitud[1] = y_r;
+		int x1_r = (int) Math.ceil(((Math.log(1+(x1_maximo-x1_minimo)/precision))/Math.log(2)));
+		int x2_r = (int) Math.ceil(((Math.log(1+(x2_maximo-x2_minimo)/precision))/Math.log(2)));
+		longitud[0] = x1_r;
+		longitud[1] = x2_r;
 		genes = new Gen[2];
 		
-		genes[0] = new Gen(x_r, randomizer);
-		genes[1] = new Gen(y_r, randomizer);
+		genes[0] = new Gen(x1_r, randomizer);
+		genes[1] = new Gen(x2_r, randomizer);
 		
 		maximizar = false;
 		
@@ -32,19 +31,19 @@ public class Funcion2 extends Cromosoma{
 	@Override
 	protected Float[] getFenotipo() {
 		Float[] array = new Float[8];
-		float x_r = (float) (x_minimo + (x_maximo-x_minimo)*valorGen(genes[0])/(Math.pow(2, longitud[0])-1));
-		float y_r = (float) (y_minimo + (y_maximo-y_minimo)*valorGen(genes[1])/(Math.pow(2, longitud[1])-1));
-		array[0] = x_r;
-		array[1] = y_r;
+		float x1_r = (float) (x1_minimo + (x1_maximo-x1_minimo)*valorGen(genes[0])/(Math.pow(2, longitud[0])-1));
+		float x2_r = (float) (x2_minimo + (x2_maximo-x2_minimo)*valorGen(genes[1])/(Math.pow(2, longitud[1])-1));
+		array[0] = x1_r;
+		array[1] = x2_r;
 		
 		return array;
 	}
 
 	@Override
 	protected Float getAptitud() {
-		float x = getFenotipo()[0];
-		float y = getFenotipo()[1];
-		float f = (float) -((y+47*Math.sin(Math.sqrt(Math.abs(y+(x/2)+47)))-x*Math.sin(Math.sqrt(Math.abs(x-(y+47))))));
+		float x1 = getFenotipo()[0];
+		float x2 = getFenotipo()[1];
+		float f = (float) (-(x2+47)*Math.sin(Math.sqrt(Math.abs(x2+(x1/2)+47)))-x1*Math.sin(Math.sqrt(Math.abs(x1-(x2+47)))));
 		return f;
 	}
 
@@ -54,6 +53,6 @@ public class Funcion2 extends Cromosoma{
 	}
 
 	public String toString(){
-		return "Valor mejor: " + getAptitud() + " en x1: " + getFenotipo()[0] + " x2: " + getFenotipo()[1];
+		return "Valor mejor: f(x)= " + getAptitud() + " , en x1 = " + getFenotipo()[0] + ", x2 = " + getFenotipo()[1];
 	}
 }

@@ -1,8 +1,6 @@
 package pr1.base;
 
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
 
 
 public class Gen {

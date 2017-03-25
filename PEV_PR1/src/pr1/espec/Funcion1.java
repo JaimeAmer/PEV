@@ -1,6 +1,5 @@
 package pr1.espec;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import pr1.base.Cromosoma;
@@ -44,6 +43,6 @@ public class Funcion1 extends Cromosoma{
 	}
 	
 	public String toString(){
-		return "Valor mejor: " + getAptitud() + " en x: " + getFenotipo()[0];
+		return "Valor mejor: f(x)= " + getAptitud() + " , en x = " + getFenotipo()[0];
 	}
 }
