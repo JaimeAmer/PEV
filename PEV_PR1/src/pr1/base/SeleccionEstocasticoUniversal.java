@@ -4,11 +4,6 @@ import java.util.Random;
 
 public class SeleccionEstocasticoUniversal implements AlgoritmoSeleccion{
 
-	private Integer participantes;
-	
-	public SeleccionEstocasticoUniversal(Integer participantes) {
-		this.participantes = participantes;
-	}
 
 	@Override
 	public void seleccionar(Float[] aptitudes,
@@ -17,26 +12,25 @@ public class SeleccionEstocasticoUniversal implements AlgoritmoSeleccion{
 			Cromosoma[] poblacion, Boolean minimizacion,
 			Random randomizer) {
 		
-		Float[] elegidosValue = new Float[participantes];
-		Integer[] elegidosIndex = new Integer[participantes];
-		/*
-		for(int i=0; i<tamanoPoblacion; i++){
-			for(int j=0; j<participantes; j++){
-				int indiceAleat = randomizer.nextInt(tamanoPoblacion);
-				elegidosValue.add(j, aptitudes.get(indiceAleat));
-				elegidosIndex.add(j, indiceAleat);
+		
+		int numMarcas = tamanoPoblacion;
+		float distanciaMarcas = 1 / (float) numMarcas;
+		// Valor entre 0 y 1/N
+		float posicionInicial = randomizer.nextFloat() / tamanoPoblacion;
+		// Valor a seleccionar
+		float posicion = posicionInicial;
+		
+		int i=0;
+		int selec = 0;
+		while(posicion < 1.0){
+			while(selec < tamanoPoblacion && posicion > puntuacionesAcumuladas[selec].floatValue()){
+				selec++;
 			}
-			
-			float maximoValor = Integer.MIN_VALUE;
-			int maximo = 0;
-			for(int j=0; j<participantes; j++){
-				if(elegidosValue.get(j).floatValue() > maximoValor){
-					maximoValor = elegidosValue.get(j).floatValue();
-					maximo = j;
-				}
+			// Ha encontrado el individuo
+			if(selec < tamanoPoblacion && i < tamanoPoblacion) {
+				seleccionados[i++].copia(poblacion[selec]);
 			}
-			
-			seleccionados.get(i).copia(poblacion.get(elegidosIndex.get(maximo)));
-		}*/
+			posicion += distanciaMarcas;
+		}
 	}
 }

@@ -23,6 +23,7 @@ public class Algoritmo {
 	private Integer participantes;
 	private Long semilla;
 	private String tipoSeleccion;
+	private String tipoAlgoritmo;
 	
 	private Float valorMejor;
 	private Cromosoma individuoMejor;
@@ -43,6 +44,7 @@ public class Algoritmo {
 			this.numElites = 1;
 		this.participantes = participantes;
 		this.tipoSeleccion = tipoSeleccion;
+		this.tipoAlgoritmo = tipoAlgoritmo;
 		this.semilla = semilla;
 		
 		if(this.semilla != 0){
@@ -151,7 +153,7 @@ public class Algoritmo {
 					mejorCromosomaGen = i;
 				}
 				
-				//	Guardamos el mas pequeño
+				//	Guardamos el mas pequeï¿½o
 				menorAptitud = Float.min(menorAptitud, aptitudes[i]);
 			}
 			
@@ -291,7 +293,7 @@ public class Algoritmo {
 			Cromosoma h2 = FuncionFactory.getFuncion(funcion, precision, n, randomizer);
 			Cromosoma p1 = this.poblacion[cruzar[i]];
 			Cromosoma p2 = this.poblacion[cruzar[i+1]];
-			Cromosoma.cruzar(p1, p2, h1, h2, randomizer, this.tipoSeleccion);
+			Cromosoma.cruzar(p1, p2, h1, h2, randomizer, this.tipoAlgoritmo);
 			
 			//	Sustituimos a los padres
 			this.poblacion[cruzar[i]] = h1;
