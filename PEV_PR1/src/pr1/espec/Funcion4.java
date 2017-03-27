@@ -9,7 +9,7 @@ import pr1.base.Gen;
 public class Funcion4 extends Cromosoma{
 
 	private float x_maximo = (float) Math.PI;
-	private float x_minimo = 0;
+	private float x_minimo = 0f;
 	private int n;
 	
 	public Funcion4(float precision, int n, Random randomizer){

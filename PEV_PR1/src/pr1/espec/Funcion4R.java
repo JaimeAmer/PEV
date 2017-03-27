@@ -7,7 +7,7 @@ import pr1.base.CromosomaReal;
 public class Funcion4R extends CromosomaReal{
 
 	private float x_maximo = (float) Math.PI;
-	private float x_minimo = 0;
+	private float x_minimo = 0f;
 	private int n;
 	
 	public Funcion4R(float precision, int n, Random randomizer){

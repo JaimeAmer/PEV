@@ -369,8 +369,9 @@ public class GUI extends javax.swing.JFrame {
     
     
     public void setResultado(String resultado, Long t, Long semilla){
+    	float time = (float) (t/1000.0);
     	
-    	String texto = "Generado en: " + t.floatValue() + " seg." + "\n" + 
+    	String texto = "Generado en: " + time + " seg." + "\n" + 
     					"Ultima semilla utilizada: " + semilla + "\n" +
     					"\n" +
     					resultado;

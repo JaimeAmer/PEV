@@ -27,7 +27,7 @@ public class Application {
 		//	Ejecucion del algoritmo
 		String result = algoritmo.execute(mejorAbsoluto, mejorGeneracion, mediaGeneracion);
 		
-		t = (System.currentTimeMillis()-t)/1000;
+		t = System.currentTimeMillis()-t;
 		
 		gui.setResultado(result, t, semilla);
 		gui.resetPlots();
