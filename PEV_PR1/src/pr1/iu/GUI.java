@@ -267,9 +267,9 @@ public class GUI extends javax.swing.JFrame {
         
         double[] x = {1};
         double[] y = {1};
-        plot2DPanel2.addLinePlot("Mejor Absoluto", Color.RED, x, y);
-        plot2DPanel2.addLinePlot("Mejor Generacion", Color.BLUE, x, y);
-        plot2DPanel2.addLinePlot("Media Generacion", Color.GREEN, x, y);
+        plot2DPanel2.addLinePlot("Mejor Absoluto", Color.BLUE, x, y);
+        plot2DPanel2.addLinePlot("Mejor de la Generacion", Color.RED, x, y);
+        plot2DPanel2.addLinePlot("Media de la Generacion", Color.GREEN, x, y);
         this.setResizable(false);
         pack();
     }// </editor-fold>    

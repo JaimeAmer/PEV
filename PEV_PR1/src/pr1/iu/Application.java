@@ -31,9 +31,9 @@ public class Application {
 		
 		gui.setResultado(result, t, semilla);
 		gui.resetPlots();
-		gui.addPlot(mejorAbsoluto, "Mejor Absoluto", Color.RED);
-		gui.addPlot(mejorGeneracion, "Mejor Generacion", Color.BLUE);
-		gui.addPlot(mediaGeneracion, "Media Generacion", Color.GREEN);
+		gui.addPlot(mejorAbsoluto, "Mejor Absoluto", Color.BLUE);
+		gui.addPlot(mejorGeneracion, "Mejor de la Generacion", Color.RED);
+		gui.addPlot(mediaGeneracion, "Media de la Generacion", Color.GREEN);
 		
 		
 	}
