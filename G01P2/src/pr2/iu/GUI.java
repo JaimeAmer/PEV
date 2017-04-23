@@ -89,7 +89,7 @@ public class GUI extends javax.swing.JFrame {
         plot2DPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Grafica"));
         plot2DPanel2.addLegend("SOUTH");
         
-        this.setTitle("Practica 2 PEV");
+        this.setTitle("Practica 1 PEV");
         
         jButton1.setText("Iniciar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {

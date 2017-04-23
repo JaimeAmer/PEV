@@ -137,7 +137,7 @@ abstract public class CromosomaReal extends Cromosoma{
 		}
 	}
 
-	abstract protected int[] getFenotipo();
+	public abstract int[] getFenotipo();
 
 	abstract protected float getAptitud();
 

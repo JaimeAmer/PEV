@@ -3,96 +3,90 @@ package pr2.base;
 import java.util.Random;
 
 
-public abstract class Cromosoma {
+public abstract class Cromosoma implements Comparable<Cromosoma> {
 
-	protected Gen[] genes;
+	private Gen[] genes;
 	
-	abstract protected int[] getFenotipo();
+	public abstract int[] getFenotipo();
 	
 	abstract protected float getAptitud();
 	
-	static private void cruzarPv(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer){
-		copiarCromosoma(hijo1, padre1);
-		copiarCromosoma(hijo2, padre2);
-		
-		int corte = randomizer.nextInt(padre1.longitudTotal()-1)+1;
-		
-		cruzarPadreHijo(padre1, hijo1, corte);
-		cruzarPadreHijo(padre2, hijo2, corte);		
-	}
+	public abstract void setFenotipo(int[] valido);
 	
-	private static void cruzarPadreHijo(Cromosoma padre, Cromosoma hijo, int corte) {
-		int longitudAcumulada = hijo.longitudTotal();
-		for(int i = corte; i < longitudAcumulada; i++){
-			int numGen = i / hijo.genes[0].getLongitud();
-			int numBit = i % hijo.genes[0].getLongitud();
-			Boolean bitHijo = hijo.genes[numGen].getAlelo()[numBit];
-			Boolean bitPadre = padre.genes[numGen].getAlelo()[numBit];
-			hijo.genes[numGen].setBit(numBit, bitPadre);
-			padre.genes[numGen].setBit(numBit, bitHijo);
-		}
-	}
-
-	private static void copiarCromosoma(Cromosoma destino, Cromosoma origen) {
+	public static void copiarCromosoma(Cromosoma destino, Cromosoma origen) {
 		// Para cada gen del cromosoma
-		for(int numGen = 0; numGen < origen.genes.length; numGen++) {
+		for(int numGen = 0; numGen < origen.getGenes().length; numGen++) {
 			// Para cada alelo/bit del gen
-			for(int numBit = 0; numBit < origen.genes[numGen].getLongitud(); numBit++) {
-				destino.genes[numGen].setBit(numBit, origen.genes[numGen].getBit(numBit));
+			for(int numBit = 0; numBit < origen.getGenes()[numGen].getLongitud(); numBit++) {
+				destino.getGenes()[numGen].setBit(numBit, origen.getGenes()[numGen].getBit(numBit));
 			}
 		}
-	}
-
-	static public void cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer, String cruce){
-		if(padre1 instanceof CromosomaReal){
-			switch(cruce){
-			case "Discreto Uniforme":
-				CromosomaReal.cruzarRealDiscretoUniforme(padre1, padre2, hijo1, hijo2, randomizer);
-				break;
-			case "Monopunto":
-				CromosomaReal.cruzarRealMonoPunto(padre1, padre2, hijo1, hijo2, randomizer);
-				break;
-			case "Aritmetico":
-				CromosomaReal.cruzarRealAritmetico(padre1, padre2, hijo1, hijo2, randomizer);
-				break;
-			case "SBX":
-				CromosomaReal.cruzarRealSBX(padre1, padre2, hijo1, hijo2, randomizer);
-				break;
-			}
-		}
-		else cruzarPv(padre1, padre2, hijo1, hijo2, randomizer);
 	}
 	
 	public void mutar(Float probabilidadMutacion, Random randomizer){
-		for(int i=0; i<genes.length; i++){
-			Boolean[] alelos = genes[i].getAlelo();
+		for(int i=0; i<getGenes().length; i++){
+			Boolean[] alelos = getGenes()[i].getAlelo();
 			for(int j=0; j<alelos.length; j++){
 				if(randomizer.nextFloat() < probabilidadMutacion){
 					alelos[j] = !alelos[j].booleanValue();
 				}
 			}
 		}
+		Permutaciones permutaciones = new Permutaciones();
+		int[] valido = permutaciones.validar(getFenotipo(), randomizer);
+		setFenotipo(valido);
 	}
 	
 	public int longitudTotal(){
 		int longitudTotal = 0;
 		
-		for(int i=0; i<genes.length; i++){
-			longitudTotal += genes[i].getLongitud();
+		for(int i=0; i<getGenes().length; i++){
+			longitudTotal += getGenes()[i].getLongitud();
 		}
 		
 		return longitudTotal;
 	}
 	
 	public void copia(Cromosoma c){
-		if(genes.length == c.genes.length){
-			for(int numGen = 0; numGen < genes.length; numGen++){
-				for(int numBit = 0; numBit < genes[0].getLongitud(); numBit++) {
-					genes[numGen].setBit(numGen, c.genes[numGen].getBit(numBit));
+		if(getGenes().length == c.getGenes().length){
+			for(int numGen = 0; numGen < getGenes().length; numGen++){
+				for(int numBit = 0; numBit < getGenes()[0].getLongitud(); numBit++) {
+					getGenes()[numGen].setBit(numBit, c.getGenes()[numGen].getBit(numBit));
 				}				
 			}
 		}
 	}
 	
 	abstract public Boolean esMaximizacion();
+	
+	/**
+	 * Devuelve -1 si este cromosoma es menor que "o"
+	 * Devuelve 1 si es mayor
+	 * Devuelve 0 si son iguales
+	 */
+	@Override
+	public int compareTo(Cromosoma o) {
+		if(longitudTotal() < o.longitudTotal())
+			return 1;
+		if (longitudTotal() > o.longitudTotal())
+			return -1;
+		
+		int[] lista1 = getFenotipo();
+		int[] lista2 = o.getFenotipo();
+		for(int i = 0; i < lista1.length; i++) {
+			if(lista1[i] < lista2[i])
+				return 1;
+			if(lista1[i] > lista2[i])
+				return -1;
+		}
+		return 0;
+	}
+
+	public Gen[] getGenes() {
+		return genes;
+	}
+
+	public void setGenes(Gen[] genes) {
+		this.genes = genes;
+	}
 }

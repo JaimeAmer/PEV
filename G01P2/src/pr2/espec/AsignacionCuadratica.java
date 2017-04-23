@@ -4,39 +4,51 @@ import java.util.Random;
 
 import pr2.base.Cromosoma;
 import pr2.base.Gen;
+import pr2.base.Permutaciones;
 
 
 public class AsignacionCuadratica extends Cromosoma{
-	private int _minimo;
-	private int _maximo;
 	private int _numLocalizaciones;
 	private int[][] _f;
 	private int[][] _d;
+	private int _numBits;
 	
 	public AsignacionCuadratica(int numLocalizaciones, int[][] d, int[][] f, Random randomizer){
 		_numLocalizaciones = numLocalizaciones;
-		_maximo = numLocalizaciones;
-		_minimo = 1;
 		_f = f;
 		_d = d;
 		// Cálculo del número de bits del gen para tener el rango deseado
-		int numBits = (int) Math.ceil(((Math.log(1+(_maximo-_minimo)))/Math.log(2)));
-		genes = new Gen[numLocalizaciones];
+		_numBits = (int) Math.ceil(((Math.log(1+(_numLocalizaciones - 1)))/Math.log(2)));
+		setGenes(new Gen[numLocalizaciones]);
+		Permutaciones generador = new Permutaciones();
+		int[] permutacion =  generador.generar(_numLocalizaciones, randomizer);
 		for(int i = 0; i < numLocalizaciones; i++){
-			genes[i] = new Gen(numBits, randomizer);
+			getGenes()[i] = new Gen(_numBits, permutacion[i]);
 		}
 	}
 
+	/**
+	 * Devuelve un array con la lista de localizaciones.
+	 */
 	@Override
-	protected int[] getFenotipo() {
+	public int[] getFenotipo() {
 		int[] array = new int[_numLocalizaciones];
-		for(int i = 0; i < genes.length; i++) {
-			int x = (int) (_minimo + (_maximo-_minimo) * genes[i].getGray2Decimal() / (Math.pow(2, _numLocalizaciones)-1));
-			array[i] = x;
+		for(int i = 0; i < getGenes().length; i++) {
+			array[i] = getGenes()[i].getGray2Entero();
 		}
 		return array;
 	}
 
+	@Override
+	public void setFenotipo(int[] array) {		
+		for(int i = 0; i < getGenes().length; i++) {
+			getGenes()[i].setAlelo(array[i]);
+		}
+	}
+	
+	/**
+	 * Devuelve el costo de una lista de localizaciones.
+	 */
 	@Override
 	protected float getAptitud() {
 		int[] s = getFenotipo();
@@ -55,6 +67,13 @@ public class AsignacionCuadratica extends Cromosoma{
 	}
 	
 	public String toString(){
-		return "Valor mejor: f(x)= " + getAptitud() + " , en x = " + getFenotipo()[0];
-	}
+		String text = "[";
+		for(int i = 0; i < getFenotipo().length; i++) {
+			if(text.length() > 1) 
+				text += ",";
+			text += String.format("%d", getFenotipo()[i]);
+		}
+		text += "]";
+		return "Valor mejor: f(x)= " + getAptitud() + " , en x = " + text;
+	}		
 }

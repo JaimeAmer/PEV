@@ -1,8 +1,13 @@
 package pr2.base;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Random;
+
+import pr2.cruce.Cruce;
+import pr2.cruce.CruceFactory;
 import pr2.espec.AsignacionCuadratica;
 
 public class Algoritmo {
@@ -20,14 +25,14 @@ public class Algoritmo {
 	private int participantes;
 	private Long semilla;
 	private String tipoSeleccion;
-	private String tipoAlgoritmo;
 	private int[][] _f;
 	private int[][] _d;
 	
 	private Float valorMejor;
 	private Cromosoma individuoMejor;
+	private String _nombreCruce;
 	
-	public Algoritmo(int numLocalizaciones, int[][] d, int[][] f, int tamanoPoblacion, float probabilidadCruce, float probabilidadMutacion, int simulaciones, long semilla, int participantes, boolean elitismo, String tipoAlgoritmo, String tipoSeleccion){
+	public Algoritmo(int numLocalizaciones, int[][] d, int[][] f, int tamanoPoblacion, float probabilidadCruce, float probabilidadMutacion, int simulaciones, long semilla, int participantes, boolean elitismo, String nombreCruce, String tipoSeleccion){
 		this.tamanoPoblacion = tamanoPoblacion;
 		this.probabilidadCruce = probabilidadCruce;
 		this.probabilidadMutacion = probabilidadMutacion;
@@ -40,11 +45,12 @@ public class Algoritmo {
 			this.numElites = 1;
 		this.participantes = participantes;
 		this.tipoSeleccion = tipoSeleccion;
-		this.tipoAlgoritmo = tipoAlgoritmo;
+		_nombreCruce = nombreCruce;
 		this.semilla = semilla;
 		this.numLocalizaciones = numLocalizaciones;
 		_d = d;
 		_f = f;
+		
 		
 		if(this.semilla != 0){
 			randomizer.setSeed(semilla);
@@ -52,16 +58,19 @@ public class Algoritmo {
 		else{
 			randomizer = new Random(semilla);
 		}
-		//	Inicializamos la poblacion
+		// Creamos la poblacion
 		this.poblacion = new Cromosoma[this.tamanoPoblacion];
 		for(int i=0; i<this.tamanoPoblacion; i++){
 			Cromosoma elem = new AsignacionCuadratica(numLocalizaciones, _d, _f, randomizer);
 			this.poblacion[i] = elem;
 		}
 		
+		// Eliminar duplicados.
+		eliminarDuplicados();
+		
 		//	El mejor individuo lo elegimos aleatoriamente, solo por la grafica
 		this.individuoMejor = new AsignacionCuadratica(numLocalizaciones, _d, _f, randomizer);
-		this.valorMejor = 0f;
+		this.valorMejor = Float.MAX_VALUE;
 		
 		if(this.elitismo.booleanValue()){
 			this.elites = new Cromosoma[this.numElites];
@@ -72,6 +81,32 @@ public class Algoritmo {
 		}
 	}
 	
+	private void eliminarDuplicados() {
+		boolean duplicados = false;
+		
+		Comparator<Cromosoma> cmp = new Comparator<Cromosoma>() {
+			@Override
+			public int compare(Cromosoma c1, Cromosoma c2){
+				return c1.compareTo(c2);
+			}
+		};
+		
+		do
+		{
+			duplicados = false;
+			// Ordenamos
+			Arrays.sort(poblacion, cmp);
+
+			// Comprobamos duplicados y sustituimos
+			for(int i = 0; i < poblacion.length - 1; i++){
+				if(poblacion[i].compareTo(poblacion[i+1]) == 0) {
+					poblacion[i] = new AsignacionCuadratica(numLocalizaciones, _d, _f, randomizer);
+					duplicados = true;
+				}
+			}
+		} while(duplicados);		
+	}
+
 	public String execute(Double[] mejorAbsoluto, Double[] mejorGeneracion, Double[] mediaGeneracion){
 		Float[] aptitudes = new Float[this.tamanoPoblacion];
 		Float[] aptitudesDesp = new Float[this.tamanoPoblacion];
@@ -135,12 +170,12 @@ public class Algoritmo {
 		float sumAptitudesDesp = 0;
 		float sumAptitudes = 0;
 		float mejorAptitudEnGen = 0;
-		float mejorAptitud;
+		float cMax;
 		//	Si se trata de una maximizacion
 		if(maximizacion){
 			mejorAptitudEnGen = Float.MIN_VALUE;
 			int mejorCromosomaGen = 0;
-			mejorAptitud = Float.MAX_VALUE;
+			cMax = Float.MAX_VALUE;
 			
 			//	Calculamos aptitudes
 			for(int i=0; i<this.tamanoPoblacion; i++){
@@ -154,7 +189,7 @@ public class Algoritmo {
 				}
 				
 				//	Guardamos el mas pequeño
-				mejorAptitud = Float.min(mejorAptitud, aptitudes[i]);
+				cMax = Float.min(cMax, aptitudes[i]);
 			}
 			
 			//	Actualizamos el mejor global
@@ -167,7 +202,7 @@ public class Algoritmo {
 		else{
 			mejorAptitudEnGen = Float.MAX_VALUE;
 			int mejorCromosomaGen = 0;
-			mejorAptitud = Float.MIN_VALUE;
+			cMax = Float.MIN_VALUE;
 			
 			//	Calculamos aptitudes
 			for(int i=0; i<this.tamanoPoblacion; i++){
@@ -181,8 +216,9 @@ public class Algoritmo {
 				}
 				
 				//	Guardamos el mas grande
-				mejorAptitud = Float.max(mejorAptitud, aptitudes[i]);				
+				cMax = Float.max(cMax, aptitudes[i]);				
 			}
+			cMax *= 1.05;
 			
 			//	Actualizamos el mejor global
 			if(mejorAptitudEnGen < this.valorMejor.floatValue()){
@@ -192,7 +228,7 @@ public class Algoritmo {
 			
 		}
 		
-		desplazarAptitudes(aptitudes, aptitudesDesp, mejorAptitud, maximizacion);
+		desplazarAdaptacion(aptitudes, aptitudesDesp, cMax, maximizacion);
 		
 		for(int i=0; i<this.tamanoPoblacion; i++){
 			sumAptitudesDesp += aptitudesDesp[i];
@@ -214,7 +250,8 @@ public class Algoritmo {
 		
 	}
 	
-	private void desplazarAptitudes(Float[] aptitudes, Float[] aptitudesDesp, Float aptitud, Boolean maximizacion){
+	private void desplazarAdaptacion(Float[] aptitudes, Float[] aptitudesDesp, Float aptitud, Boolean maximizacion){
+		
 		if(maximizacion){
 			for(int i=0; i<aptitudes.length; i++){
 				aptitudesDesp[i] = aptitudes[i]+aptitud;
@@ -270,12 +307,13 @@ public class Algoritmo {
 	
 	//	Metodo que cruza la poblacion
 	private void cruzar(){
+		int tamanoPoblacion = poblacion.length;
 		int numSeleccionados = 0;
-		int[] cruzar = new int[this.tamanoPoblacion];
+		int[] cruzar = new int[tamanoPoblacion];
 		
-		//	Obtenemos los cromosomas
-		for(int i=0; i<this.tamanoPoblacion; i++){
-			if(randomizer.nextFloat() < this.probabilidadCruce){
+		//	Seleccionamos aleatoriamente los cromosomas a cruzar
+		for(int i=0; i<tamanoPoblacion; i++){
+			if(randomizer.nextFloat() < probabilidadCruce){
 				cruzar[numSeleccionados] = i;
 				numSeleccionados++;
 			}
@@ -286,17 +324,19 @@ public class Algoritmo {
 			numSeleccionados--;
 		}
 		
-		//	Cruzamos
+		Cruce cruce = CruceFactory.crear(_nombreCruce);		
+		
+		// Cruzamos
 		for(int i=0; i<numSeleccionados/2; i++){
 			Cromosoma h1 = new AsignacionCuadratica(numLocalizaciones, _d, _f, randomizer);
 			Cromosoma h2 = new AsignacionCuadratica(numLocalizaciones, _d, _f, randomizer);
-			Cromosoma p1 = this.poblacion[cruzar[i]];
-			Cromosoma p2 = this.poblacion[cruzar[i+1]];
-			Cromosoma.cruzar(p1, p2, h1, h2, randomizer, this.tipoAlgoritmo);
-			
+			Cromosoma p1 = poblacion[cruzar[i]];
+			Cromosoma p2 = poblacion[cruzar[i+1]];
+			cruce.cruzar(p1, p2, h1, h2, randomizer);			
+	
 			//	Sustituimos a los padres
-			this.poblacion[cruzar[i]] = h1;
-			this.poblacion[cruzar[i+1]] = h2;
+			poblacion[cruzar[i]] = h1;
+			poblacion[cruzar[i+1]] = h2;
 		}
 	}
 	
