@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.InputMismatchException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -444,6 +445,9 @@ public class GUI extends javax.swing.JFrame {
 				return;
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			} catch (InputMismatchException e1) {
+				JOptionPane.showMessageDialog(null, "El fichero de datos tiene un formato erróneo. No se puede cargar.", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			

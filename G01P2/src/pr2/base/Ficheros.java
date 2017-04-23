@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Ficheros {
@@ -17,7 +18,7 @@ public class Ficheros {
 	}
 	
 	// Función que lee las matrices f y d del archivo
-	public void cargaMatrices() throws IOException, FileNotFoundException {
+	public void cargaMatrices() throws IOException, FileNotFoundException, InputMismatchException {
 		BufferedReader br = new BufferedReader(new FileReader(nombreArchivo));
 		Scanner sc = new Scanner(br);
 		
