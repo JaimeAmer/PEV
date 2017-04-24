@@ -14,12 +14,16 @@ public class Application {
 		gui.setVisible(true);
 	}
 	
-	public void init(int numLocalizaciones, int[][] d, int[][] f, float probabilidadCruce, float probabilidadMutacion, String metodoSeleccion, boolean elitismo, int tamanoPoblacion, int numGeneraciones, long semilla, int participantes, String tipoAlgoritmo){
+	public void init(int numLocalizaciones, int[][] d, int[][] f, float probabilidadCruce, float probabilidadMutacion, String metodoSeleccion, 
+			boolean elitismo, int tamanoPoblacion, int numGeneraciones, long semilla, int participantes, String nombreCruce, String nombreMutacion, 
+			float porcentajeInversion, int puntoInicioInversion, int puntoFinalInversion){
 		
 		long t = System.currentTimeMillis();
 		
 		// COMPROBAR PARAMETROS BIEN COLOCADOS
-		Algoritmo algoritmo = new Algoritmo(numLocalizaciones, d, f, tamanoPoblacion, probabilidadCruce, probabilidadMutacion, numGeneraciones, semilla, participantes, elitismo, tipoAlgoritmo, metodoSeleccion);
+		Algoritmo algoritmo = new Algoritmo(numLocalizaciones, d, f, tamanoPoblacion, probabilidadCruce, probabilidadMutacion, 
+				numGeneraciones, semilla, participantes, elitismo, nombreCruce, nombreMutacion, metodoSeleccion, 
+				porcentajeInversion, puntoInicioInversion, puntoFinalInversion);
 		Double[] mejorAbsoluto = new Double[numGeneraciones];
 		Double[] mejorGeneracion = new Double[numGeneraciones];
 		Double[] mediaGeneracion = new Double[numGeneraciones];

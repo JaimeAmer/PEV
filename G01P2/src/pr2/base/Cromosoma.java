@@ -23,20 +23,6 @@ public abstract class Cromosoma implements Comparable<Cromosoma> {
 		}
 	}
 	
-	public void mutar(Float probabilidadMutacion, Random randomizer){
-		for(int i=0; i<getGenes().length; i++){
-			Boolean[] alelos = getGenes()[i].getAlelo();
-			for(int j=0; j<alelos.length; j++){
-				if(randomizer.nextFloat() < probabilidadMutacion){
-					alelos[j] = !alelos[j].booleanValue();
-				}
-			}
-		}
-		Permutaciones permutaciones = new Permutaciones();
-		int[] valido = permutaciones.validar(getFenotipo(), randomizer);
-		setFenotipo(valido);
-	}
-	
 	public int longitudTotal(){
 		int longitudTotal = 0;
 		
@@ -88,5 +74,9 @@ public abstract class Cromosoma implements Comparable<Cromosoma> {
 
 	public void setGenes(Gen[] genes) {
 		this.genes = genes;
+	}
+
+	public int longitud() {
+		return genes.length;
 	}
 }

@@ -7,7 +7,8 @@ import pr2.base.Cromosoma;
 public class CruceOX implements Cruce {
 
 	@Override
-	public void cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer) {
+	public int cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer) {
+		int cruces = 0;
 		int[] datosPadre1 = padre1.getFenotipo();
 		int[] datosPadre2 = padre2.getFenotipo();
 		int[] datosHijo1 = hijo1.getFenotipo();
@@ -29,17 +30,19 @@ public class CruceOX implements Cruce {
 		{
 			hijo1.setFenotipo(datosPadre1);
 			hijo2.setFenotipo(datosPadre2);
-			return;
+			return 0;
 		}
 		
-		generarHijo(datosPadre1, datosPadre2, datosHijo1, c1, c2);
-		generarHijo(datosPadre2, datosPadre1, datosHijo2, c1, c2);
+		cruces = generarHijo(datosPadre1, datosPadre2, datosHijo1, c1, c2);
+		cruces += generarHijo(datosPadre2, datosPadre1, datosHijo2, c1, c2);
 
 		hijo1.setFenotipo(datosHijo1);
-		hijo2.setFenotipo(datosHijo2);		
+		hijo2.setFenotipo(datosHijo2);
+		return cruces;
 	}
 
-	private void generarHijo(int[] datosPadre1, int[] datosPadre2, int[] datosHijo, int c1, int c2) {
+	private int generarHijo(int[] datosPadre1, int[] datosPadre2, int[] datosHijo, int c1, int c2) {
+		int cruces = 0;
 		// Marcamos el hijo todo con x (-1)
 		for(int i = 0; i < datosHijo.length; i++) {
 			datosHijo[i] = -1;
@@ -68,8 +71,10 @@ public class CruceOX implements Cruce {
 			}
 			if(!encontrado) {
 				datosHijo[indiceHijo] = valor;
+				cruces++;
 				indiceHijo = (indiceHijo + 1) % datosPadre1.length;
 			}			
 		}
+		return cruces;
 	}
 }

@@ -34,6 +34,19 @@ public class Permutaciones {
 		
 		return resultado;
 	}
+
+	public boolean validar(int[] muestra) {
+		ArrayList<Integer> candidatos = generaCandidatos(muestra.length);
+		
+		for(int i = 0; i < muestra.length; i++) {
+			int valor = candidatos.indexOf(muestra[i]);
+			if (valor == -1) {
+				return false;
+			}
+			candidatos.remove(valor);
+		}		
+		return true;
+	}
 	
 	private int validarNumero(Random randomizer, ArrayList<Integer> candidatos, int numero, int limite) {
 		// Comprueba el rango del número 1-limite

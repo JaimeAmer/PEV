@@ -1,6 +1,5 @@
 package pr2.cruce;
 
-import java.util.HashSet;
 import java.util.Random;
 
 import pr2.base.Cromosoma;
@@ -8,20 +7,24 @@ import pr2.base.Cromosoma;
 public class CrucePropio implements Cruce {
 
 	@Override
-	public void cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer) {
+	public int cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer) {
+		int cruces = 0;
 		int[] datosPadre1 = padre1.getFenotipo();
 		int[] datosPadre2 = padre2.getFenotipo();
 		int[] datosHijo1 = hijo1.getFenotipo();
 		int[] datosHijo2 = hijo2.getFenotipo();
 				
-		generarHijo(datosPadre1, datosPadre2, datosHijo1, randomizer);
-		generarHijo(datosPadre2, datosPadre1, datosHijo2, randomizer);
+		cruces = generarHijo(datosPadre1, datosPadre2, datosHijo1, randomizer);
+		cruces += generarHijo(datosPadre2, datosPadre1, datosHijo2, randomizer);
 		
 		hijo1.setFenotipo(datosHijo1);
 		hijo2.setFenotipo(datosHijo2);
+		
+		return cruces;
 	}
 
-	private void generarHijo(int[] datosPadre1, int[] datosPadre2, int[] datosHijo, Random randomizer) {
+	private int generarHijo(int[] datosPadre1, int[] datosPadre2, int[] datosHijo, Random randomizer) {
+		int cruces = 0;
 		int longitud = datosPadre1.length;
 		int puntoCruce = 1 + randomizer.nextInt(longitud - 1);
 		
@@ -29,7 +32,8 @@ public class CrucePropio implements Cruce {
 			datosHijo[i] = datosPadre1[i];
 		}
 		
-		// La parte derecha del hijo se obtiene del segundo padre asegurándonos que no se repiten valores
+		// La parte derecha del hijo se obtiene del segundo padre.
+		// Se va leyendo del padre y si no existe en el hijo se copia
 		int indicePadre = 0;
 		for(int i = puntoCruce; i < longitud; i++) {
 			int valor;
@@ -45,8 +49,10 @@ public class CrucePropio implements Cruce {
 				}
 				if(encontrado)
 					indicePadre++;
-			} while (encontrado);
+			} while (encontrado && indicePadre < longitud);
 			datosHijo[i] = valor;
+			cruces++;
 		}
+		return cruces;
 	}
 }

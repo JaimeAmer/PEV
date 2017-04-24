@@ -9,7 +9,8 @@ import pr2.base.Cromosoma;
 public class CruceCodOrd implements Cruce {
 
 	@Override
-	public void cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer) {
+	public int cruzar(Cromosoma padre1, Cromosoma padre2, Cromosoma hijo1, Cromosoma hijo2, Random randomizer) {
+		int cruces = 0;
 		int[] datosPadre1 = padre1.getFenotipo();
 		int[] datosPadre2 = padre2.getFenotipo();
 		int[] datosHijo1 = hijo1.getFenotipo();
@@ -21,7 +22,7 @@ public class CruceCodOrd implements Cruce {
 		generarResultado(datosPadre1, resultado1, randomizer);
 		generarResultado(datosPadre2, resultado2, randomizer);
 		
-		cruzar(resultado1, resultado2, randomizer);
+		cruces = cruzar(resultado1, resultado2, randomizer);
 		
 		ArrayList<Integer> lista = crearLista(datosPadre1);
 		generarHijo(lista, resultado1, datosHijo1);
@@ -29,7 +30,9 @@ public class CruceCodOrd implements Cruce {
 		generarHijo(lista, resultado2, datosHijo2);
 		
 		hijo1.setFenotipo(datosHijo1);
-		hijo2.setFenotipo(datosHijo2);		
+		hijo2.setFenotipo(datosHijo2);
+		
+		return cruces;
 	}
 
 	private void generarHijo(ArrayList<Integer> lista, int[] resultado, int[] datosHijo) {
@@ -41,14 +44,16 @@ public class CruceCodOrd implements Cruce {
 		}
 	}
 
-	private void cruzar(int[] resultado1, int[] resultado2, Random randomizer) {
+	private int cruzar(int[] resultado1, int[] resultado2, Random randomizer) {
 		int puntoCruce = 1 + randomizer.nextInt(resultado1.length - 1);
-		
+		int cruces = 0;
 		for(int i = puntoCruce; i < resultado1.length; i++) {
 			int temp = resultado1[i];
 			resultado1[i] = resultado2[i];
 			resultado2[i] = temp;
-		}		
+			cruces++;
+		}
+		return cruces;
 	}
 
 	private void generarResultado(int[] datosPadre, int[] resultado, Random randomizer) {

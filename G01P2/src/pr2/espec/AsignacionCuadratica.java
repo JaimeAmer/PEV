@@ -9,8 +9,8 @@ import pr2.base.Permutaciones;
 
 public class AsignacionCuadratica extends Cromosoma{
 	private int _numLocalizaciones;
-	private int[][] _f;
-	private int[][] _d;
+	private static int[][] _f;
+	private static int[][] _d;
 	private int _numBits;
 	
 	public AsignacionCuadratica(int numLocalizaciones, int[][] d, int[][] f, Random randomizer){
@@ -52,15 +52,20 @@ public class AsignacionCuadratica extends Cromosoma{
 	@Override
 	protected float getAptitud() {
 		int[] s = getFenotipo();
+		return getAptitud(s);		
+	}
+
+	public static float getAptitud(int[] s) {	
 		float coste = 0;
-		for(int i = 0; i < _numLocalizaciones; i++) {
-			for(int j = 0; j < _numLocalizaciones; j++) {
+		int longitud = s.length;
+		for(int i = 0; i < longitud; i++) {
+			for(int j = 0; j < longitud; j++) {
 				coste += _f[i][j] * _d[s[i]][s[j]];
 			}
 		}
 		return coste;
 	}
-
+	
 	@Override
 	public Boolean esMaximizacion() {
 		return false;

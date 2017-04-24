@@ -11,14 +11,9 @@ import java.util.Scanner;
 public class Ficheros {
 	private int[][] _d;
 	private int[][] _f;
-	private File nombreArchivo;
-	
-	public Ficheros(File nombreArchivo){
-		this.nombreArchivo = nombreArchivo;
-	}
 	
 	// Función que lee las matrices f y d del archivo
-	public void cargaMatrices() throws IOException, FileNotFoundException, InputMismatchException {
+	public void cargaMatrices(File nombreArchivo) throws FileNotFoundException, IOException, InputMismatchException {
 		BufferedReader br = new BufferedReader(new FileReader(nombreArchivo));
 		Scanner sc = new Scanner(br);
 		

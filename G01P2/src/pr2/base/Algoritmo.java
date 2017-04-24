@@ -6,9 +6,16 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import javax.swing.text.MutableAttributeSet;
+
 import pr2.cruce.Cruce;
 import pr2.cruce.CruceFactory;
 import pr2.espec.AsignacionCuadratica;
+import pr2.mutacion.InversionEspecial;
+import pr2.mutacion.Mutacion;
+import pr2.mutacion.MutacionFactory;
+import pr2.selec.AlgoritmoSeleccion;
+import pr2.selec.AlgoritmoSeleccionFactory;
 
 public class Algoritmo {
 
@@ -27,12 +34,20 @@ public class Algoritmo {
 	private String tipoSeleccion;
 	private int[][] _f;
 	private int[][] _d;
-	
-	private Float valorMejor;
+	private float aptitudMinimaGlobal;
+	private float aptitudMaximaGlobal;
+	private double aptitudMediaGlobal;
+	private int totalCruces;
+	private int totalMutaciones;
+	private int totalInversiones;
 	private Cromosoma individuoMejor;
-	private String _nombreCruce;
+	private Cruce _cruce;
+	private Mutacion _mutacion;
+	private InversionEspecial inversionEspecial;
 	
-	public Algoritmo(int numLocalizaciones, int[][] d, int[][] f, int tamanoPoblacion, float probabilidadCruce, float probabilidadMutacion, int simulaciones, long semilla, int participantes, boolean elitismo, String nombreCruce, String tipoSeleccion){
+	public Algoritmo(int numLocalizaciones, int[][] d, int[][] f, int tamanoPoblacion, float probabilidadCruce, float probabilidadMutacion, 
+			int simulaciones, long semilla, int participantes, boolean elitismo, String nombreCruce, String nombreMutacion, String tipoSeleccion,
+			float porcentajeInversion, int puntoInicioInversion, int puntoFinalInversion){
 		this.tamanoPoblacion = tamanoPoblacion;
 		this.probabilidadCruce = probabilidadCruce;
 		this.probabilidadMutacion = probabilidadMutacion;
@@ -45,12 +60,13 @@ public class Algoritmo {
 			this.numElites = 1;
 		this.participantes = participantes;
 		this.tipoSeleccion = tipoSeleccion;
-		_nombreCruce = nombreCruce;
 		this.semilla = semilla;
 		this.numLocalizaciones = numLocalizaciones;
 		_d = d;
 		_f = f;
-		
+		_cruce = CruceFactory.crear(nombreCruce);
+		_mutacion = MutacionFactory.crear(nombreMutacion);
+		inversionEspecial = new InversionEspecial(porcentajeInversion, puntoInicioInversion, puntoFinalInversion);
 		
 		if(this.semilla != 0){
 			randomizer.setSeed(semilla);
@@ -67,10 +83,15 @@ public class Algoritmo {
 		
 		// Eliminar duplicados.
 		eliminarDuplicados();
-		
+				
 		//	El mejor individuo lo elegimos aleatoriamente, solo por la grafica
 		this.individuoMejor = new AsignacionCuadratica(numLocalizaciones, _d, _f, randomizer);
-		this.valorMejor = Float.MAX_VALUE;
+		aptitudMinimaGlobal = Float.MAX_VALUE;
+		aptitudMaximaGlobal = Float.MIN_VALUE;
+		aptitudMediaGlobal = 0;
+		totalCruces = 0;
+		totalMutaciones = 0;
+		totalInversiones = 0;
 		
 		if(this.elitismo.booleanValue()){
 			this.elites = new Cromosoma[this.numElites];
@@ -116,7 +137,7 @@ public class Algoritmo {
 		for(int i=0; i<this.simulaciones; i++){
 			Double[] infogen = new Double[2];// 0 mejor de la generacion, 1 media
 			evaluar(aptitudes, aptitudesDesp, puntuaciones, puntuacionesAcum, infogen, this.poblacion[0].esMaximizacion().booleanValue());
-			mejorAbsoluto[i] = this.valorMejor.doubleValue();
+			mejorAbsoluto[i] = (double) aptitudMinimaGlobal;
 			mejorGeneracion[i] = infogen[0];
 			mediaGeneracion[i] = infogen[1];
 			
@@ -130,14 +151,25 @@ public class Algoritmo {
 			//	Mutamos
 			mutar();
 			
+			// Inversion Especial
+			inversionEspecial();
+						
 			//	Si hay elitismo, volvemos a evaluar para sustituir los peores por la elite
 			if(this.elitismo.booleanValue()){
 				evaluar(aptitudes, aptitudesDesp, puntuaciones, puntuacionesAcum, infogen, this.poblacion[0].esMaximizacion().booleanValue());
 				introducirElites(aptitudesDesp);
-			}
+			}			
 		}
 		
-		return this.individuoMejor.toString();
+		int numGeneraciones = tamanoPoblacion * simulaciones;
+		aptitudMediaGlobal /= numGeneraciones;
+		
+		String resultado = this.individuoMejor.toString() + "\n";
+		resultado += String.format("Aptitud máxima: %f, Aptitud mínima: %f, Aptitud media: %f\n", aptitudMaximaGlobal, aptitudMinimaGlobal, aptitudMediaGlobal);
+		resultado += String.format("Total de cruces: %d, Total de mutaciones: %d, Total de inversiones: %d", totalCruces, totalMutaciones, totalInversiones);
+		
+		
+		return resultado;
 	}
 	
 	private void introducirElites(Float[] aptitudes){
@@ -169,65 +201,41 @@ public class Algoritmo {
 	private void evaluar(Float[] aptitudes, Float[] aptitudesDesp, Float[] puntuaciones, Float[] puntuacionesAcum, Double[] infogen, Boolean maximizacion){
 		float sumAptitudesDesp = 0;
 		float sumAptitudes = 0;
-		float mejorAptitudEnGen = 0;
-		float cMax;
-		//	Si se trata de una maximizacion
-		if(maximizacion){
-			mejorAptitudEnGen = Float.MIN_VALUE;
-			int mejorCromosomaGen = 0;
-			cMax = Float.MAX_VALUE;
+		float aptitudMinimaEnGen = Float.MAX_VALUE;
+		float aptitudMaximaEnGen = Float.MIN_VALUE;
+		int mejorCromosomaGen = 0;
+		float cMax = Float.MIN_VALUE;
+		
+		//	Calculamos aptitudes
+		for(int i=0; i<this.tamanoPoblacion; i++){
+			aptitudes[i] = this.poblacion[i].getAptitud();
+			sumAptitudes += aptitudes[i];
 			
-			//	Calculamos aptitudes
-			for(int i=0; i<this.tamanoPoblacion; i++){
-				aptitudes[i] = this.poblacion[i].getAptitud();
-				sumAptitudes += aptitudes[i];
-				
-				//	Actualizamos el mejor
-				if(aptitudes[i] > mejorAptitudEnGen){
-					mejorAptitudEnGen = aptitudes[i];
-					mejorCromosomaGen = i;
-				}
-				
-				//	Guardamos el mas pequeño
-				cMax = Float.min(cMax, aptitudes[i]);
+			//	Actualizamos el mejor
+			if(aptitudes[i] < aptitudMinimaEnGen){
+				aptitudMinimaEnGen = aptitudes[i];
+				mejorCromosomaGen = i;
 			}
 			
-			//	Actualizamos el mejor global
-			if(mejorAptitudEnGen > this.valorMejor){
-				this.valorMejor = mejorAptitudEnGen;
-				this.individuoMejor.copia(this.poblacion[mejorCromosomaGen]);
+			if(aptitudMaximaEnGen < aptitudes[i]) {
+				aptitudMaximaEnGen = aptitudes[i];
 			}
+			
+			//	Guardamos el mas grande
+			cMax = Float.max(cMax, aptitudes[i]);				
 		}
-		//	Si se trata de una minimizacion
-		else{
-			mejorAptitudEnGen = Float.MAX_VALUE;
-			int mejorCromosomaGen = 0;
-			cMax = Float.MIN_VALUE;
-			
-			//	Calculamos aptitudes
-			for(int i=0; i<this.tamanoPoblacion; i++){
-				aptitudes[i] = this.poblacion[i].getAptitud();
-				sumAptitudes += aptitudes[i];
-				
-				//	Actualizamos el mejor
-				if(aptitudes[i] < mejorAptitudEnGen){
-					mejorAptitudEnGen = aptitudes[i];
-					mejorCromosomaGen = i;
-				}
-				
-				//	Guardamos el mas grande
-				cMax = Float.max(cMax, aptitudes[i]);				
-			}
-			cMax *= 1.05;
-			
-			//	Actualizamos el mejor global
-			if(mejorAptitudEnGen < this.valorMejor.floatValue()){
-				this.valorMejor = mejorAptitudEnGen;
-				this.individuoMejor.copia(this.poblacion[mejorCromosomaGen]);
-			}
-			
+		cMax *= 1.05;
+		
+		//	Actualizamos el mejor global
+		if(aptitudMinimaEnGen < aptitudMinimaGlobal){
+			this.aptitudMinimaGlobal = aptitudMinimaEnGen;
+			this.individuoMejor.copia(this.poblacion[mejorCromosomaGen]);
 		}
 		
+		if(aptitudMaximaEnGen > aptitudMaximaGlobal){
+			aptitudMaximaGlobal = aptitudMaximaEnGen;			
+		}
+				
 		desplazarAdaptacion(aptitudes, aptitudesDesp, cMax, maximizacion);
 		
 		for(int i=0; i<this.tamanoPoblacion; i++){
@@ -245,9 +253,9 @@ public class Algoritmo {
 		puntuacionesAcum[this.tamanoPoblacion-1] = 1f; // Asegurarse que el ultimo valor es 1
 		
 		//	Informacion de la generacion
-		infogen[0] = (double) mejorAptitudEnGen;
-		infogen[1] = (double) (sumAptitudes/this.tamanoPoblacion);
-		
+		infogen[0] = (double) aptitudMinimaEnGen; // Aptitud mínima (mejor)
+		infogen[1] = (double) (sumAptitudes/this.tamanoPoblacion); // Aptitud media
+		aptitudMediaGlobal += sumAptitudes;		
 	}
 	
 	private void desplazarAdaptacion(Float[] aptitudes, Float[] aptitudesDesp, Float aptitud, Boolean maximizacion){
@@ -322,9 +330,7 @@ public class Algoritmo {
 		//	Redondeo a par
 		if(numSeleccionados % 2 == 1){
 			numSeleccionados--;
-		}
-		
-		Cruce cruce = CruceFactory.crear(_nombreCruce);		
+		}				
 		
 		// Cruzamos
 		for(int i=0; i<numSeleccionados/2; i++){
@@ -332,8 +338,9 @@ public class Algoritmo {
 			Cromosoma h2 = new AsignacionCuadratica(numLocalizaciones, _d, _f, randomizer);
 			Cromosoma p1 = poblacion[cruzar[i]];
 			Cromosoma p2 = poblacion[cruzar[i+1]];
-			cruce.cruzar(p1, p2, h1, h2, randomizer);			
-	
+			
+			totalCruces += _cruce.cruzar(p1, p2, h1, h2, randomizer);			
+			
 			//	Sustituimos a los padres
 			poblacion[cruzar[i]] = h1;
 			poblacion[cruzar[i+1]] = h2;
@@ -343,7 +350,22 @@ public class Algoritmo {
 	//	Metodo que muta la poblacion
 	private void mutar(){
 		for(int i=0; i<this.tamanoPoblacion; i++){
-			this.poblacion[i].mutar(probabilidadMutacion, randomizer);
+			int[] fenotipo = poblacion[i].getFenotipo();
+			totalMutaciones += _mutacion.mutar(fenotipo, probabilidadMutacion, randomizer);
+			poblacion[i].setFenotipo(fenotipo);
+		}
+	}
+	
+	private void inversionEspecial() {
+		for(int i=0; i<this.tamanoPoblacion; i++){
+			int[] fenotipo = poblacion[i].getFenotipo();
+			float aptitudInicial = poblacion[i].getAptitud(); 
+			totalInversiones += inversionEspecial.ejecutar(fenotipo, randomizer);
+			float aptitudFinal = AsignacionCuadratica.getAptitud(fenotipo);
+			// Se modifica el individuo original si la aptitud ha mejorado
+			if(aptitudFinal < aptitudInicial) {
+				poblacion[i].setFenotipo(fenotipo);
+			}			
 		}
 	}
 	
