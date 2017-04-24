@@ -316,33 +316,11 @@ public class GUI extends javax.swing.JFrame {
 		int participantes = 0;
 		String nombreCruce = this.comboBoxCruce.getSelectedItem().toString();
 		String nombreMutacion = this.comboBoxMutacion.getSelectedItem().toString();
-		float porcentajeInversion = 70; 
-		int puntoInicioInversion = 1;
-		int puntoFinalInversion = 3;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		String metodoSeleccion = ""; //JESSIE! He pisado el combobox de seleccion sin darme cuenta. Falta volver a ponerlo 
-		
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+		Float porcentajeInversion = Float.parseFloat(this.jSpinner10.getValue().toString()); 
+		Integer puntoInicioInversion = Integer.parseInt(this.jSpinner11.getValue().toString());
+		Integer puntoFinalInversion = Integer.parseInt(this.jSpinner12.getValue().toString());
+		String metodoSeleccion = this.jComboBox2.getSelectedItem().toString();
+						
 		if(this.jComboBox2.getSelectedItem().toString().split(" ")[0].equals("Torneo")){
 			participantes = Integer.parseInt(this.jTextField8.getText());
 		}
